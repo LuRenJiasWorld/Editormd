@@ -1,0 +1,24 @@
+{
+  "name": "editormd",
+  "version": "2.0.1",
+  "homepage": "https://github.com/JaxsonWang/editormd",
+  "authors": [
+    "Jaxson Wang <wangjin@boxrom.com>"
+  ],
+  "description": "Open source online markdown editor.",
+  "keywords": [
+    "editor.md",
+    "markdown",
+    "editor"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "research",
+    "docs",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

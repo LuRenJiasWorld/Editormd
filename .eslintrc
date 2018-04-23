@@ -1,0 +1,37 @@
+{
+    "parser": "espree",
+    "parserOptions": {
+        "ecmaVersion": 5,
+        "sourceType": "script",
+        "ecmafeatures": {
+            "globalReturn": true,
+            "impliedStrict": true
+        }
+    },
+    "env": {
+        "browser": true,
+        "node": true,
+        "jquery": true
+    },
+    "globals": {
+        "$": false,
+        "jQuery": false,
+        "define": false,
+        "Zepto": false
+    },
+    //off或0--关闭规则
+    //warn或1--开启规则，警告级别(不会导致程序退出)
+    //error或2--开启规则，错误级别(当被触发的时候，程序会退出)
+    "rules": {
+        "eqeqeq": "warn",
+        "no-undef": "warn",
+        "no-useless-escape": "warn",
+        "no-unused-vars": "warn",
+        "no-empty": "warn",
+        "no-extra-semi": "warn"
+    },
+    "root": true,
+    "extends": [
+        "eslint:recommended"
+    ]
+}

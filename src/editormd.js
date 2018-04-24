@@ -203,7 +203,7 @@
         tocContainer: "",
         tocStartLevel: 1, // Said from H1 to create ToC
         htmlDecode: false, // Open the HTML tag identification
-        pageBreak: true, // Enable parse page break [========]
+        pageBreak: true, // Enable parse page break <!--nextpage-->
         atLink: true, // for @link
         emailLink: true, // for email address auto link
         taskList: false, // Enable Github Flavored Markdown task lists
@@ -2798,7 +2798,7 @@
             }
             var cm = this.cm
             var selection = cm.getSelection()
-            cm.replaceSelection("\r\n[========]\r\n")
+            cm.replaceSelection("\r\n<!--nextpage-->\r\n")
         },
         image: function () {
             this.executePlugin("imageDialog", "image-dialog/image-dialog")
@@ -3053,12 +3053,12 @@
     }
     // Emoji graphics files url path
     editormd.emoji = {
-        path: "http://www.emoji-cheat-sheet.com/graphics/emojis/",
+        path: "//cdnjs.cloudflare.com/ajax/libs/emojify.js/1.1.0/images/basic/",
         ext: ".png"
     }
     // Twitter Emoji (Twemoji)  graphics files url path
     editormd.twemoji = {
-        path: "http://twemoji.maxcdn.com/36x36/",
+        path: "//cdnjs.cloudflare.com/ajax/libs/twemoji/2.6.0/36x36/",
         ext: ".png"
     }
 

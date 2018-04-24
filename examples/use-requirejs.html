@@ -4,7 +4,7 @@
         <meta charset="utf-8" />
         <title>Using require.js - Editor.md examples</title>
         <link rel="stylesheet" href="css/style.css" />
-        <link rel="stylesheet" href="../lib/codemirror/codemirror.min.css" /> 
+        <link rel="stylesheet" href="../lib/codemirror/codemirror.min.css" />
         <!-- <link rel="stylesheet" href="../lib/codemirror/addon/fold/foldgutter.css" /> -->
         <link rel="stylesheet" href="../css/editormd.min.css" />
         <link rel="shortcut icon" href="https://pandao.github.io/editor.md/favicon.ico" type="image/x-icon" />
@@ -18,7 +18,7 @@
                     <li>Enable TeX, Flowchart, Sequence Diagram, Emoji, FontAwesome, Task lists</li>
                     <li>Enable Image upload</li>
                     <li>Enable [TOCM], Search Replace, Code fold</li>
-                </ul>        
+                </ul>
             </header>
             <div class="btns">
                 <button id="show-btn">Show editor</button>
@@ -35,9 +35,9 @@
                 <button id="toc-default-btn">ToC default</button>
             </div>
             <div id="test-editormd"></div>
-        </div>   
+        </div>
         <script src="js/require.min.js"></script>
-        <script type="text/javascript">            
+        <script type="text/javascript">
             requirejs.config({
                 baseUrl: "../lib/",
                 paths: {
@@ -45,19 +45,19 @@
                     marked          : "marked.min",
                     prettify        : "prettify.min",
                     raphael         : "raphael.min",
-                    underscore      : "underscore.min",
-                    flowchart       : "flowchart.min", 
-                    jqueryflowchart : "jquery.flowchart.min", 
+                    underscore      : "underscore-min",
+                    flowchart       : "flowchart.min",
+                    jqueryflowchart : "jquery.flowchart.min",
                     sequenceDiagram : "sequence-diagram.min",
                     katex           : "//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.1.1/katex.min",
                     editormd        : "../editormd.amd" // Using Editor.md amd version for Require.js
                 },
                 waitSeconds: 30
             });
-            
+
             var deps = [
-                "editormd", 
-                "../languages/en", 
+                "editormd",
+                "../languages/en",
                 "../plugins/link-dialog/link-dialog",
                 "../plugins/reference-link-dialog/reference-link-dialog",
                 "../plugins/image-dialog/image-dialog",
@@ -66,18 +66,18 @@
                 "../plugins/emoji-dialog/emoji-dialog",
                 "../plugins/goto-line-dialog/goto-line-dialog",
                 "../plugins/help-dialog/help-dialog",
-                "../plugins/html-entities-dialog/html-entities-dialog", 
+                "../plugins/html-entities-dialog/html-entities-dialog",
                 "../plugins/preformatted-text-dialog/preformatted-text-dialog"
             ];
-            
+
             var testEditor;
-                
+
             require(deps, function(editormd) {
-                
+
                 // if enable codeFold
                 // or <link rel="stylesheet" href="../lib/codemirror/addon/fold/foldgutter.css" />
                 editormd.loadCSS("../lib/codemirror/addon/fold/foldgutter");
-                
+
                 $.get('test.md', function(md) {
                     testEditor = editormd("test-editormd", {
                         width: "90%",
@@ -87,7 +87,7 @@
                         codeFold : true,
                         searchReplace : true,
                         saveHTMLToTextarea : true,                // 保存HTML到Textarea
-                        htmlDecode : "style,script,iframe|on*",       // 开启HTML标签解析，为了安全性，默认不开启    
+                        htmlDecode : "style,script,iframe|on*",       // 开启HTML标签解析，为了安全性，默认不开启
                         emoji : true,
                         taskList : true,
                         tex : true,
@@ -132,15 +132,15 @@
 
                 $("#get-html-btn").bind('click', function() {
                     alert(testEditor.getHTML());
-                });                
+                });
 
                 $("#watch-btn").bind('click', function() {
                     testEditor.watch();
-                });                 
+                });
 
                 $("#unwatch-btn").bind('click', function() {
                     testEditor.unwatch();
-                });              
+                });
 
                 $("#preview-btn").bind('click', function() {
                     testEditor.previewing();
@@ -157,14 +157,14 @@
                 $("#close-toolbar-btn").bind('click', function() {
                     testEditor.hideToolbar();
                 });
-                
+
                 $("#toc-menu-btn").click(function(){
                     testEditor.config({
                         tocDropdown   : true,
                         tocTitle      : "目录 Table of Contents",
                     });
                 });
-                
+
                 $("#toc-default-btn").click(function() {
                     testEditor.config("tocDropdown", false);
                 });

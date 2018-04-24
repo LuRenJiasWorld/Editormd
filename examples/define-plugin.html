@@ -4,15 +4,15 @@
         <meta charset="utf-8" />
         <title>Define extention plugins for Editor.md - Editor.md examples</title>
         <link rel="stylesheet" href="css/style.css" />
-        <link rel="stylesheet" href="../css/editormd.css" />
+        <link rel="stylesheet" href="../editormd.css" />
         <link rel="shortcut icon" href="https://pandao.github.io/editor.md/favicon.ico" type="image/x-icon" />
     </head>
     <body>
         <div id="layout">
             <header>
-                <h1>Define extention plugins for Editor.md</h1> 
+                <h1>Define extention plugins for Editor.md</h1>
             </header>
-            <div id="test-editormd">                
+            <div id="test-editormd">
                 <textarea style="display:none;">[TOC]
 
 ### Define plugin
@@ -73,7 +73,7 @@
                 factory(editormd);
             });
 		}
-	} 
+	}
 	else
 	{
         factory(window.editormd);
@@ -106,31 +106,31 @@
 ```
 </textarea>
             </div>
-        </div>        
+        </div>
         <script src="js/jquery.min.js"></script>
         <script src="../editormd.js"></script>
         <script type="text/javascript">
             var testEditor;
-            
+
             editormd.fn.customMethod = function() {
                 console.log("customMethod", this);
             };
-            
+
             editormd.fn.pluginA = function() {
                 console.log("pluginA", this);
             };
-            
+
             $(function() {
                 editormd.methodOne = function(){
                     console.log("editormd.methodOne");
                 };
-                
+
                 editormd.loadPlugin("../plugins/test-plugin/test-plugin", function(){
                     editormd.testPlugin();
                 });
-                
+
                 editormd.loadPlugin("../plugins/image-dialog/image-dialog", function(){
-                
+
                     testEditor = editormd("test-editormd", {
                         width  : "90%",
                         height : 720,
@@ -143,7 +143,7 @@
                         }
                     }); // execute plugin
                 });
-                
+
                 editormd.methodOne();
             });
         </script>

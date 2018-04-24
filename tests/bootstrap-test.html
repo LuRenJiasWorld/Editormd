@@ -8,7 +8,7 @@
 
         <!-- Optional theme -->
         <link rel="stylesheet" href="./css/bootstrap-theme.min.css">
-        <link rel="stylesheet" href="../css/editormd.css" />
+        <link rel="stylesheet" href="../editormd.css" />
         <link rel="shortcut icon" href="https://pandao.github.io/editor.md/favicon.ico" type="image/x-icon" />
         <style>
             header {width: 90%;margin: 0 auto 20px;}
@@ -31,8 +31,8 @@
         <script type="text/javascript">
 			var testEditor;
 
-            $(function() {     
-                
+            $(function() {
+
                 $.get("../examples/test.md", function(md){
                     testEditor = editormd("test-editormd", {
                         width: "90%",
@@ -40,9 +40,9 @@
                         path : '../lib/',
                         markdown : md,
                         codeFold : true,
-                        saveHTMLToTextarea : true, 
+                        saveHTMLToTextarea : true,
                         searchReplace : true,
-                        htmlDecode : "style,script,iframe|on*", 
+                        htmlDecode : "style,script,iframe|on*",
                         emoji : true,
                         taskList : true,
                         tocm            : true,         // Using [TOCM]
@@ -56,7 +56,7 @@
                             console.log('onload', this);
                         }
                     });
-                });  
+                });
             });
         </script>
     </body>

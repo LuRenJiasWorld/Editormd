@@ -4,7 +4,7 @@
         <meta charset="utf-8" />
         <title>Using Zepto.js - Editor.md examples</title>
         <link rel="stylesheet" href="css/style.css" />
-        <link rel="stylesheet" href="../css/editormd.css" />
+        <link rel="stylesheet" href="../editormd.css" />
         <link rel="shortcut icon" href="https://pandao.github.io/editor.md/favicon.ico" type="image/x-icon" />
     </head>
     <body>
@@ -16,7 +16,7 @@
                     <li>Enable TeX, Flowchart, Sequence Diagram, Emoji, FontAwesome, Task lists</li>
                     <li>Enable Image upload</li>
                     <li>Enable [TOCM], Search Replace, Code fold</li>
-                </ul>  
+                </ul>
             </header>
             <div class="btns">
                 <button id="show-btn">Show editor</button>
@@ -33,14 +33,14 @@
                 <button id="toc-default-btn">ToC default</button>
             </div>
             <form action="http://editormd.ipandao.com/php/post.php" method="post">
-                <div class="editormd" id="test-editormd">                
+                <div class="editormd" id="test-editormd">
                     <textarea>### Hello world!</textarea>
                 </div>
                 <br/><input type="submit" name="submit" value="Submit" class="btn" style="margin-left: 5%;" />
             </form>
-        </div>        
+        </div>
         <script src="js/zepto.min.js"></script>
-        <script src="../editormd.js"></script>   
+        <script src="../editormd.js"></script>
         <script type="text/javascript">
 			var testEditor;
 			var jQuery = Zepto;  // 为了避免修改 flowChart.js 和 sequence-diagram.js 的源码，所以想支持 flowChart / sequenceDiagram 就得加上这一句
@@ -62,7 +62,7 @@
                         tocm            : true,         // Using [TOCM]
                         tex : true,                     // 开启科学公式 TeX 语言支持，默认关闭
                         //previewCodeHighlight : false,  // 关闭预览窗口的代码高亮，默认开启
-                        flowChart : true,  
+                        flowChart : true,
                         sequenceDiagram : true,         // 同上
 						onload : function() {
 							console.log("onload =>", this, this.id, this.settings);
@@ -84,15 +84,15 @@
 
                 $("#get-html-btn").bind('click', function() {
                     alert(testEditor.getHTML());
-                });                
+                });
 
                 $("#watch-btn").bind('click', function() {
                     testEditor.watch();
-                });                 
+                });
 
                 $("#unwatch-btn").bind('click', function() {
                     testEditor.unwatch();
-                });              
+                });
 
                 $("#preview-btn").bind('click', function() {
                     testEditor.previewing();
@@ -101,22 +101,22 @@
                 $("#fullscreen-btn").bind('click', function() {
                     testEditor.fullscreen();
                 });
-                
+
                 $("#show-toolbar-btn").bind('click', function() {
                     testEditor.showToolbar();
                 });
-                
+
                 $("#close-toolbar-btn").bind('click', function() {
                     testEditor.hideToolbar();
                 });
-                
+
                 $("#toc-menu-btn").click(function(){
                     testEditor.config({
                         tocDropdown   : true,
                         tocTitle      : "目录 Table of Contents",
                     });
                 });
-                
+
                 $("#toc-default-btn").click(function() {
                     testEditor.config("tocDropdown", false);
                 });

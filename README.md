@@ -1,6 +1,6 @@
 # Editormd
 
-**此版本Fork原作者项目，由我来维护！**
+**此版本Fork原作者项目，针对WordPress平台特性修改**
 
 ![](./images/logos/editormd-logo-180x180.png)
 

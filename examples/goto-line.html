@@ -4,13 +4,13 @@
         <meta charset="utf-8" />
         <title>Goto line - Editor.md examples</title>
         <link rel="stylesheet" href="css/style.css" />
-        <link rel="stylesheet" href="../css/editormd.css" />   
-        <link rel="shortcut icon" href="https://pandao.github.io/editor.md/favicon.ico" type="image/x-icon" />     
+        <link rel="stylesheet" href="../editormd.css" />
+        <link rel="shortcut icon" href="https://pandao.github.io/editor.md/favicon.ico" type="image/x-icon" />
     </head>
     <body>
         <div id="layout">
             <header>
-                <h1>Goto line</h1>   
+                <h1>Goto line</h1>
             </header>
             <div class="btns">
                 <button id="goto-line-btn">Goto line 90</button>
@@ -27,9 +27,9 @@
         <script src="../editormd.js"></script>
         <script type="text/javascript">
             var testEditor;
-            
+
             $(function() {
-                
+
                 $.get("test.md", function(md){
                     testEditor = editormd("test-editormd", {
                         width           : "90%",
@@ -46,33 +46,33 @@
                         //gotoLine        : false  // disabled
                     });
                 });
-                
+
                 $("#goto-line-btn").bind("click", function(){
                     testEditor.gotoLine(90);
                 });
-                
+
                 $("#goto-line-150-btn").bind("click", function(){
                     testEditor.gotoLine(150);
                 });
-                
+
                 $("#goto-line-240-btn").bind("click", function(){
                     testEditor.gotoLine(240);
                 });
-                
+
                 $("#goto-line-300-btn").bind("click", function(){
                     testEditor.gotoLine(300);
                 });
-                
+
                 $("#goto-line-400-btn").bind("click", function(){
                     testEditor.gotoLine(400);
                 });
-                
+
                 $("#goto-first-line-btn").bind("click", function(){
                     testEditor.gotoLine("first");
                     // or
                     //testEditor.gotoLine(1);
                 });
-                
+
                 $("#goto-last-line-btn").bind("click", function(){
                     testEditor.gotoLine("last");
                     // or

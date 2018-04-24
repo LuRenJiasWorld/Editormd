@@ -560,7 +560,7 @@
                 }
                 if (settings.flowChart || settings.sequenceDiagram) {
                     editormd.loadScript(loadPath + "raphael.min", function () {
-                        editormd.loadScript(loadPath + "underscore.min", function () {
+                        editormd.loadScript(loadPath + "underscore-min", function () {
                             if (!settings.flowChart && settings.sequenceDiagram) {
                                 editormd.loadScript(
                                     loadPath + "sequence-diagram.min",
@@ -599,7 +599,7 @@
                 }
             }
 
-            editormd.loadCSS(loadPath + "codemirror/codemirror.min")
+            editormd.loadCSS(loadPath + "codemirror/lib/codemirror")
             if (settings.searchReplace && !settings.readOnly) {
                 editormd.loadCSS(loadPath + "codemirror/addon/dialog/dialog")
                 editormd.loadCSS(
@@ -609,7 +609,7 @@
             if (settings.codeFold) {
                 editormd.loadCSS(loadPath + "codemirror/addon/fold/foldgutter")
             }
-            editormd.loadScript(loadPath + "codemirror/codemirror.min", function () {
+            editormd.loadScript(loadPath + "codemirror/lib/codemirror", function () {
                 editormd.$CodeMirror = CodeMirror
                 editormd.loadScript(loadPath + "codemirror/modes.min", function () {
                     editormd.loadScript(loadPath + "codemirror/addons.min", function () {

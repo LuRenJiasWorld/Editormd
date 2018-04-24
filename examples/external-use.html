@@ -4,13 +4,13 @@
         <meta charset="utf-8" />
         <title>External use - Editor.md examples</title>
         <link rel="stylesheet" href="css/style.css" />
-        <link rel="stylesheet" href="../css/editormd.css" />
+        <link rel="stylesheet" href="../editormd.css" />
         <link rel="shortcut icon" href="https://pandao.github.io/editor.md/favicon.ico" type="image/x-icon" />
     </head>
     <body>
         <div id="layout">
             <header>
-                <h1>External use</h1> 
+                <h1>External use</h1>
                 <p>External use of toolbar handlers / modal dialog</p>
             </header>
             <div class="btns">
@@ -23,17 +23,17 @@
                 <button id="open-help-dialog">Open help dialog</button>
                 <button id="open-html-entities-dialog">Open html entities dialog</button>
             </div>
-            <div id="test-editormd">                
+            <div id="test-editormd">
                 <textarea style="display:none;">[TOC]
 
 ### External use of toolbar handlers / modal dialog
 
-```javascript 
+```javascript
 testEditor = editormd("test-editormd", {
     width  : "90%",
     height : 720,
     path   : '../lib/'
-}); 
+});
 
 // the first method
 $("#undo").bind('click', function() {
@@ -59,56 +59,56 @@ $("#open-image-dialog").bind('click', function(){
 ```
 </textarea>
             </div>
-        </div>        
+        </div>
         <script src="js/jquery.min.js"></script>
         <script src="../editormd.js"></script>
-        
+
         <!-- manually load dialog plugin -->
         <script src="../plugins/html-entities-dialog/html-entities-dialog.js"></script>
         <script type="text/javascript">
             var testEditor;
-            
-            $(function() {             
+
+            $(function() {
                 testEditor = editormd("test-editormd", {
                     width  : "90%",
                     height : 720,
                     path   : '../lib/'
-                }); 
-                
+                });
+
                 // the first method
                 $("#undo").bind('click', function() {
                     $.proxy(testEditor.toolbarHandlers.undo, testEditor)();
                 });
-                
+
                 // the Second method : using manually loaded dialog plugin
                 $("#open-html-entities-dialog").bind('click', function() {
                     testEditor.htmlEntitiesDialog();
                 });
-                
+
                 $("#insert-bold").bind('click', function() {
                     $.proxy(testEditor.toolbarHandlers.bold, testEditor)();
                     testEditor.focus();
                 });
-                
+
                 $("#insert-h6").bind('click', function() {
                     $.proxy(testEditor.toolbarHandlers.h6, testEditor)();
                     testEditor.focus();
                 });
-                
+
                 $("#insert-inline-code").bind('click', function() {
                     $.proxy(testEditor.toolbarHandlers.code, testEditor)();
                     testEditor.focus();
-                });                
-                
+                });
+
                 $("#open-help-dialog").bind('click', function() {
                     $.proxy(testEditor.toolbarHandlers.help, testEditor)();
                 });
-                
+
                 // using toolbar dialog plugin
                 $("#open-link-dialog").bind('click', function() {
                     $.proxy(testEditor.toolbarHandlers.link, testEditor)();
                 });
-                
+
                 // or
                 $("#open-image-dialog").bind('click', function(){
                     testEditor.executePlugin("imageDialog", "../plugins/image-dialog/image-dialog"); // load and execute plugin

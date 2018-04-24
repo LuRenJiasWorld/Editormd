@@ -4,7 +4,7 @@
         <meta charset="utf-8" />
         <title>Tex 科学公式语言 (TeX/LaTeX) - Editor.md examples</title>
         <link rel="stylesheet" href="css/style.css" />
-        <link rel="stylesheet" href="../css/editormd.css" />
+        <link rel="stylesheet" href="../editormd.css" />
         <link rel="shortcut icon" href="https://pandao.github.io/editor.md/favicon.ico" type="image/x-icon" />
     </head>
     <body>
@@ -14,9 +14,9 @@
 				<p>Based on KaTeX.js：<a href="http://khan.github.io/KaTeX/" target="_blank">http://khan.github.io/KaTeX/</a></p>
                 <p>P.S. Default using CloudFlare KaTeX's CDN. (注：默认使用 CloudFlare 的 CDN，有时加载速度会比较慢，可自定义加载地址。)</p>
                 <br/>
-                <p><a href="https://jsperf.com/katex-vs-mathjax" target="_blank">KaTeX vs MathJax</a></p>   
+                <p><a href="https://jsperf.com/katex-vs-mathjax" target="_blank">KaTeX vs MathJax</a></p>
             </header>
-            <div id="test-editormd">                
+            <div id="test-editormd">
                 <textarea style="display:none;">[TOC]
 
 #### Setting
@@ -39,7 +39,7 @@ editormd.katexURL = {
 #### Examples
 
 ##### 行内的公式 Inline
- 
+
 $$E=mc^2$$
 
 Inline 行内的公式 $$E=mc^2$$ 行内的公式，行内的$$E=mc^2$$公式。
@@ -53,7 +53,7 @@ $$f(x) = x^2$$
 $$\alpha = \sqrt{1-e^2}$$
 
 $$\(\sqrt{3x-1}+(1+x)^2\)$$
-             
+
 $$\sin(\alpha)^{\theta}=\sum_{i=0}^{n}(x^i + \cos(f))$$
 
 $$\\dfrac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}$$
@@ -145,20 +145,20 @@ f(x) = \int_{-\infty}^\infty
 ```
 
 ```math
-\dfrac{ 
+\dfrac{
     \tfrac{1}{2}[1-(\tfrac{1}{2})^n] }
     { 1-\tfrac{1}{2} } = s_n
 ```
 
 ```katex
-\displaystyle 
+\displaystyle
     \frac{1}{
         \Bigl(\sqrt{\phi \sqrt{5}}-\phi\Bigr) e^{
         \frac25 \pi}} = 1+\frac{e^{-2\pi}} {1+\frac{e^{-4\pi}} {
         1+\frac{e^{-6\pi}}
         {1+\frac{e^{-8\pi}}
          {1+\cdots} }
-        } 
+        }
     }
 ```
 
@@ -175,9 +175,9 @@ f(x) = \int_{-\infty}^\infty
 </textarea>
             </div>
         </div>
-        
+
         <script src="js/jquery.min.js"></script>
-        <script src="../editormd.js"></script>   
+        <script src="../editormd.js"></script>
         <script type="text/javascript">
             $(function() {
                 var testEditor = editormd("test-editormd", {

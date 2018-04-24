@@ -4,7 +4,7 @@
         <meta charset="utf-8" />
         <title>Sync scrolling - Editor.md examples</title>
         <link rel="stylesheet" href="css/style.css" />
-        <link rel="stylesheet" href="../css/editormd.css" />
+        <link rel="stylesheet" href="../editormd.css" />
         <link rel="shortcut icon" href="https://pandao.github.io/editor.md/favicon.ico" type="image/x-icon" />
     </head>
     <body>
@@ -52,15 +52,15 @@ editor.config("syncScrolling", true);
                     height  : 360,
                     path    : "../lib/"
                 });
-                
+
                 $(".bisync-btn").click(function(){
                     testEditor.config("syncScrolling", true);
                 });
-                
+
                 $(".single-btn").click(function(){
                     testEditor.config("syncScrolling", "single");
                 });
-                
+
                 $(".disabled-btn").click(function(){
                     testEditor.config("syncScrolling", false);
                 });

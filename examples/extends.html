@@ -4,7 +4,7 @@
         <meta charset="utf-8" />
         <title>Expanded Editor.md - Editor.md examples</title>
         <link rel="stylesheet" href="css/style.css" />
-        <link rel="stylesheet" href="../css/editormd.css" />
+        <link rel="stylesheet" href="../editormd.css" />
         <link rel="shortcut icon" href="https://pandao.github.io/editor.md/favicon.ico" type="image/x-icon" />
     </head>
     <body>
@@ -13,7 +13,7 @@
                 <h1>Expanded Editor.md</h1>
                 <p>Expanded of member methods and properties</p>
             </header>
-            <div id="test-editormd">                
+            <div id="test-editormd">
                 <textarea style="display:none;">### Expanded Editor.md
 
 ```javascript
@@ -82,12 +82,12 @@ $(function() {
 ```
 </textarea>
             </div>
-        </div>        
+        </div>
         <script src="js/jquery.min.js"></script>
         <script src="../editormd.js"></script>
         <script type="text/javascript">
             var testEditor;
-            
+
             function EditormdExtend() {
 
                 this.extend("methodC", function() {
@@ -126,16 +126,16 @@ $(function() {
 
                 console.log(this, this.propertyA);
             }
-            
+
             editormd.fn.customMethod = function() {
                 console.log("customMethod", this);
             };
-            
+
             $(function() {
                 editormd.methodOne = function() {
                     console.log("editormd.methodOne");
                 };
-                
+
                 testEditor = editormd("test-editormd", {
                     width  : "90%",
                     height : 720,
@@ -145,7 +145,7 @@ $(function() {
                         $.proxy(EditormdExtend, this)();
                     }
                 });
-                
+
                 editormd.methodOne();
             });
         </script>

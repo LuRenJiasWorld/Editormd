@@ -4,7 +4,7 @@
         <meta charset="utf-8" />
         <title>Auto height - Editor.md examples</title>
         <link rel="stylesheet" href="css/style.css" />
-        <link rel="stylesheet" href="../css/editormd.css" />
+        <link rel="stylesheet" href="../editormd.css" />
         <link rel="shortcut icon" href="https://pandao.github.io/editor.md/favicon.ico" type="image/x-icon" />
     </head>
     <body>
@@ -36,14 +36,14 @@ var testEditor = editormd("test-editormd", {
                     width           : "90%",
                     autoHeight      : true,
                     path            : "../lib/",
-                    htmlDecode      : "style,script,iframe", 
+                    htmlDecode      : "style,script,iframe",
                     tex             : true,
                     emoji           : true,
                     taskList        : true,
-                    flowChart       : true, 
+                    flowChart       : true,
                     sequenceDiagram : true
                 });
-                
+
                 $("#append-btn").click(function(){
                     $.get("./test.md", function(md){
                         testEditor.appendMarkdown(md);

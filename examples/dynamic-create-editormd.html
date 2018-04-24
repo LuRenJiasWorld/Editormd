@@ -4,7 +4,7 @@
         <meta charset="utf-8" />
         <title>动态创建 Editor.md - Editor.md examples</title>
         <link rel="stylesheet" href="css/style.css" />
-        <link rel="stylesheet" href="../css/editormd.css" />
+        <link rel="stylesheet" href="../editormd.css" />
         <link rel="shortcut icon" href="https://pandao.github.io/editor.md/favicon.ico" type="image/x-icon" />
     </head>
     <body>
@@ -19,16 +19,16 @@
                 </div>
             </header>
         </div>
-        
-        <script src="js/jquery.min.js"></script> 
+
+        <script src="js/jquery.min.js"></script>
         <script type="text/javascript">
             var testEditormd;
-            
-            $(function() {                
-                $("#create-btn").click(function(){                    
+
+            $(function() {
+                $("#create-btn").click(function(){
 					$.getScript("../editormd.js", function() {
                         $("#layout").append("<div id=\"test-editormd\"></div>");
-                        
+
                         testEditormd = editormd("test-editormd", {
                             width: "90%",
                             height: 640,
@@ -36,8 +36,8 @@
                             path : '../lib/'
                         });
 					});
-                });  
-                
+                });
+
                 $("#remove-btn").click(function() {
                     testEditormd.editor.remove();
                 });

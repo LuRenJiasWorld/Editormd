@@ -4,7 +4,7 @@
         <meta charset="utf-8" />
         <title>Custom keyboard shortcuts - Editor.md examples</title>
         <link rel="stylesheet" href="css/style.css" />
-        <link rel="stylesheet" href="../css/editormd.css" />
+        <link rel="stylesheet" href="../editormd.css" />
         <link rel="shortcut icon" href="https://pandao.github.io/editor.md/favicon.ico" type="image/x-icon" />
     </head>
     <body>
@@ -61,9 +61,9 @@ var testEditor = editormd("test-editormd", {
         <script type="text/javascript">
 			var testEditor;
 
-            $(function() {   
+            $(function() {
                 var widgets = [];
-                
+
                 testEditor = editormd("test-editormd", {
                     width: "90%",
                     height: 720,
@@ -77,9 +77,9 @@ var testEditor = editormd("test-editormd", {
                                 var cursor = cm.getCursor();
 
                                 //cm.replaceSelection("@");
-                                
+
                                 widgets.push(cm.addWidget({line : cursor.line, ch : cursor.ch}, $("<p style='z-index:100000;background:red;color:#fff;padding:5px;' id='test'>fsdfsdfsdf</p>")[0], true));
-                                console.log(cm.getCursor(), cm.getLine(cursor.line), cm.getLineTokens(cursor.line));   
+                                console.log(cm.getCursor(), cm.getLine(cursor.line), cm.getLineTokens(cursor.line));
                     },
                     onload : function() {
                         var keyMap = {
@@ -95,23 +95,23 @@ var testEditor = editormd("test-editormd", {
                             //"Shift-2" : function(cm){
                             //}
                         };
-                        
+
                         this.cm.on("keyup", function(cm){
                             //$("#test").remove();
                         });
-                        
+
                         // setting signle key
                         var keyMap2 = {
                               "Ctrl-T": function(cm) {
                                 alert("Ctrl+T");
                               }
                         };
-                        
+
                         this.addKeyMap(keyMap);
                         this.addKeyMap(keyMap2);
                         this.removeKeyMap(keyMap2);  // remove signle key
                     }
-                });    
+                });
             });
         </script>
     </body>

@@ -13,3 +13,5 @@ examples/uploads/**/*
 .project
 .url
 css/*.map
+lib/codemirror/addons.min.js
+lib/codemirror/modes.min.js

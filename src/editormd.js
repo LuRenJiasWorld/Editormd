@@ -3291,17 +3291,17 @@
             return text
         }
         markedRenderer.paragraph = function (text) {
-            var isTeXInline = /\$\$(.*)\$\$/g.test(text)
-            var isTeXLine = /^\$\$(.*)\$\$$/.test(text)
+            var isTeXInline = /\$\$?([\s\S]*)\$?\$/g.test(text);
+            var isTeXLine = /^\$\$?([\s\S]*)\$?\$$/.test(text);
             var isTeXAddClass = isTeXLine
                 ? ' class="' + editormd.classNames.tex + '"'
-                : ""
+                : "";
             var isToC = settings.tocm
-                ? /^(\[TOC\]|\[TOCM\])$/.test(text)
-                : /^\[TOC\]$/.test(text)
-            var isToCMenu = /^\[TOCM\]$/.test(text)
+                ? /^(\[TOC\]|\[TOCM\])$/i.test(text)
+                : /^\[TOC\]$/i.test(text)
+            var isToCMenu = /^\[TOCM\]$/i.test(text)
             if (!isTeXLine && isTeXInline) {
-                text = text.replace(/(\$\$([^\$]*)\$\$)+/g, function ($1, $2) {
+                text = text.replace(/(\$\$?([^\$]*)\$?\$)+/g, function ($1, $2) {
                     return (
                         '<span class="' +
                         editormd.classNames.tex +
@@ -3311,7 +3311,7 @@
                     )
                 })
             } else {
-                text = isTeXLine ? text.replace(/\$/g, "") : text
+                text = isTeXLine ? text.replace(/\$/g, "") : text;
             }
             var tocHTML =
                 '<div class="markdown-toc editormd-markdown-toc">' + text + "</div>"
@@ -3749,37 +3749,61 @@
     // CodeMirror / editor area themes
     // @1.5.0 rename -> editorThemes, old version -> themes
     editormd.editorThemes = [
-        "default",
-        "3024-day",
-        "3024-night",
-        "ambiance",
-        "ambiance-mobile",
-        "base16-dark",
-        "base16-light",
-        "blackboard",
-        "cobalt",
-        "eclipse",
-        "elegant",
-        "erlang-dark",
-        "lesser-dark",
-        "mbo",
-        "mdn-like",
-        "midnight",
-        "monokai",
-        "neat",
-        "neo",
-        "night",
-        "paraiso-dark",
-        "paraiso-light",
-        "pastel-on-dark",
-        "rubyblue",
-        "solarized",
-        "the-matrix",
-        "tomorrow-night-eighties",
-        "twilight",
-        "vibrant-ink",
-        "xq-dark",
-        "xq-light"
+        'default',
+        '3024-day',
+        '3024-night',
+        'abcdef',
+        'ambiance',
+        'ambiance-mobile',
+        'base16-dark',
+        'base16-light',
+        'bespin',
+        'blackboard',
+        'cobalt',
+        'colorforth',
+        'dracula',
+        'duotone-dark',
+        'duotone-light',
+        'eclipse',
+        'elegant',
+        'erlang-dark',
+        'gruvbox-dark',
+        'hopscotch',
+        'icecoder',
+        'idea',
+        'isotope',
+        'lesser-dark',
+        'liquibyte',
+        'lucario',
+        'material',
+        'mbo',
+        'mdn-like',
+        'midnight',
+        'monokai',
+        'neat',
+        'neo',
+        'night',
+        'oceanic-next',
+        'panda-syntax',
+        'paraiso-dark',
+        'paraiso-light',
+        'pastel-on-dark',
+        'railscasts',
+        'rubyblue',
+        'seti',
+        'shadowfox',
+        'solarized',
+        'ssms',
+        'the-matrix',
+        'tomorrow-night-bright',
+        'tomorrow-night-eighties',
+        'ttcn',
+        'twilight',
+        'vibrant-ink',
+        'xq-dark',
+        'xq-light',
+        'yeti',
+        'zenburn'
     ]
     editormd.loadPlugins = {}
     editormd.loadFiles = {
@@ -3883,15 +3907,15 @@
         } else {
             document.body.appendChild(script)
         }
-    }
+    };
 
     // 使用国外的CDN，加载速度有时会很慢，或者自定义URL
     // You can custom KaTeX load url.
     editormd.katexURL = {
-        css: "//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.3.0/katex.min",
-        js: "//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.3.0/katex.min"
-    }
-    editormd.kaTeXLoaded = false
+        css: "//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.9.0/katex.min",
+        js: "//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.9.0/katex.min"
+    };
+    editormd.kaTeXLoaded = false;
     /**
      * 加载KaTeX文件
      * load KaTeX files
@@ -3903,7 +3927,7 @@
             editormd.loadScript(editormd.katexURL.js, callback || function () {
             })
         })
-    }
+    };
 
     /**
      * 锁屏
@@ -3915,7 +3939,7 @@
 
     editormd.lockScreen = function (lock) {
         $("html,body").css("overflow", lock ? "hidden" : "")
-    }
+    };
 
     /**
      * 动态创建对话框
@@ -3942,31 +3966,30 @@
             lockScreen: true,
             footer: true,
             buttons: false
-        }
+        };
 
-        options = $.extend(true, defaults, options)
+        options = $.extend(true, defaults, options);
 
-        var $this = this
-        var editor = this.editor
-        var classPrefix = editormd.classPrefix
-        var guid = new Date().getTime()
-        var dialogName =
-            options.name === "" ? classPrefix + "dialog-" + guid : options.name
-        var mouseOrTouch = editormd.mouseOrTouch
-        var html = '<div class="' + classPrefix + "dialog " + dialogName + '">'
+        var $this = this;
+        var editor = this.editor;
+        var classPrefix = editormd.classPrefix;
+        var guid = new Date().getTime();
+        var dialogName = options.name === "" ? classPrefix + "dialog-" + guid : options.name;
+        var mouseOrTouch = editormd.mouseOrTouch;
+        var html = '<div class="' + classPrefix + "dialog " + dialogName + '">';
         if (options.title !== "") {
             html +=
                 '<div class="' +
                 classPrefix +
                 'dialog-header"' +
                 (options.drag ? ' style="cursor: move;"' : "") +
-                ">"
+                ">";
             html +=
                 '<strong class="' +
                 classPrefix +
                 'dialog-title">' +
                 options.title +
-                "</strong>"
+                "</strong>";
             html += "</div>"
         }
         if (options.closed) {
@@ -3976,7 +3999,7 @@
                 'dialog-close"></a>'
         }
         html +=
-            '<div class="' + classPrefix + 'dialog-container">' + options.content
+            '<div class="' + classPrefix + 'dialog-container">' + options.content;
         if (options.footer || typeof options.footer === "string") {
             html +=
                 '<div class="' +
@@ -3985,29 +4008,29 @@
                 (typeof options.footer === "boolean" ? "" : options.footer) +
                 "</div>"
         }
-        html += "</div>"
+        html += "</div>";
         html +=
             '<div class="' +
             classPrefix +
             "dialog-mask " +
             classPrefix +
-            'dialog-mask-bg"></div>'
+            'dialog-mask-bg"></div>';
         html +=
             '<div class="' +
             classPrefix +
             "dialog-mask " +
             classPrefix +
-            'dialog-mask-con"></div>'
-        html += "</div>"
-        editor.append(html)
-        var dialog = editor.find("." + dialogName)
+            'dialog-mask-con"></div>';
+        html += "</div>";
+        editor.append(html);
+        var dialog = editor.find("." + dialogName);
         dialog.lockScreen = function (lock) {
             if (options.lockScreen) {
-                $("html,body").css("overflow", lock ? "hidden" : "")
+                $("html,body").css("overflow", lock ? "hidden" : "");
                 $this.resize()
             }
             return dialog
-        }
+        };
         dialog.showMask = function () {
             if (options.mask) {
                 editor

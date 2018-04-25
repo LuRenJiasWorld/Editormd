@@ -1,15 +1,16 @@
 # Editormd
 
-**此版本Fork原作者项目，针对WordPress平台特性修改**
-
 ![](./images/logos/editormd-logo-180x180.png)
 
 ![](https://img.shields.io/github/stars/JaxsonWang/editormd.svg)
-![](https://img.shields.io/github/forks/JaxsonWang/editormd.svg)
-![](https://img.shields.io/github/tag/JaxsonWang/editormd.svg)
-![](https://img.shields.io/github/release/JaxsonWang/editormd.svg)
+![https://github.com/JaxsonWang/Editormd/issues](https://img.shields.io/github/forks/JaxsonWang/editormd.svg)
+![https://github.com/JaxsonWang/Editormd/tags](https://img.shields.io/github/tag/JaxsonWang/editormd.svg)
+![https://github.com/JaxsonWang/Editormd/releases](https://img.shields.io/github/release/JaxsonWang/editormd.svg)
 ![](https://img.shields.io/github/issues/JaxsonWang/editormd.svg)
-![](https://img.shields.io/bower/v/editormd.svg)
+![https://github.com/JaxsonWang/Editormd/releases](https://img.shields.io/bower/v/editormd.svg)
+[![欢迎PRs](https://img.shields.io/badge/PRs-welcome-ff69b4.svg)](https://github.com/JaxsonWang/Editormd/pulls) 
+
+**此版本Fork原作者项目，针对WordPress平台特性修改**
 
 **Editor.md** : The open source embeddable online markdown editor (component), based on CodeMirror & jQuery & Marked.
 

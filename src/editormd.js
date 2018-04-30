@@ -372,7 +372,8 @@
         }
     };
     editormd.classNames = {
-        tex: editormd.classPrefix + "tex"
+        inline_tex: editormd.classPrefix + "inline-tex",
+        block_tex: editormd.classPrefix + 'block-tex'
     };
     editormd.dialogZindex = 99999;
     editormd.$katex = null;
@@ -1465,13 +1466,18 @@
             if (timer === null) {
                 return this
             }
-            this.previewContainer
-                .find("." + editormd.classNames.tex)
-                .each(function () {
-                    var tex = $(this)
-                    editormd.$katex.render(tex.text(), tex[0])
-                    tex.find(".katex").css("font-size", "1.6em")
-                })
+            //行内公式
+            this.previewContainer.find("." + editormd.classNames.inline_tex).each(function () {
+                    var tex = $(this);
+                    editormd.$katex.render(tex.text(), tex[0]);
+                    tex.find(".katex").css("font-size", "1.6em");
+            });
+            //多行公式
+            this.previewContainer.find("." + editormd.classNames.block_tex).each(function () {
+                var tex = $(this);
+                editormd.$katex.render(tex.text(), tex[0],{displayMode:true});
+                tex.find(".katex").css("font-size", "1.6em");
+            });
             return this
         },
 
@@ -3294,7 +3300,7 @@
             var isTeXInline = /\$\$?([\s\S]*)\$?\$/g.test(text);
             var isTeXLine = /^\$\$?([\s\S]*)\$?\$$/.test(text);
             var isTeXAddClass = isTeXLine
-                ? ' class="' + editormd.classNames.tex + '"'
+                ? ' class="' + editormd.classNames.inline_tex + '"'
                 : "";
             var isToC = settings.tocm
                 ? /^(\[TOC\]|\[TOCM\])$/i.test(text)
@@ -3304,7 +3310,7 @@
                 text = text.replace(/(\$\$?([^\$]*)\$?\$)+/g, function ($1, $2) {
                     return (
                         '<span class="' +
-                        editormd.classNames.tex +
+                        editormd.classNames.inline_tex +
                         '">' +
                         $2.replace(/\$/g, "") +
                         "</span>"
@@ -3333,7 +3339,7 @@
             } else if (lang === "flow") {
                 return '<div class="flowchart">' + code + "</div>"
             } else if (lang === "math" || lang === "latex" || lang === "katex") {
-                return '<p class="' + editormd.classNames.tex + '">' + code + "</p>"
+                return '<p class="' + editormd.classNames.block_tex + '">' + code + "</p>"
             } else {
                 return marked.Renderer.prototype.code.apply(this, arguments)
             }
@@ -3712,7 +3718,7 @@
         }
         if (settings.tex) {
             var katexHandle = function () {
-                div.find("." + editormd.classNames.tex).each(function () {
+                div.find("." + editormd.classNames.inline_tex).each(function () {
                     var tex = $(this)
                     katex.render(
                         tex

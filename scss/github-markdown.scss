@@ -454,16 +454,6 @@
     content: "\00a0";
 }
 
-.markdown-body pre > code {
-    padding: 0;
-    margin: 0;
-    font-size: 100%;
-    word-break: normal;
-    white-space: pre;
-    background: transparent;
-    border: 0;
-}
-
 .markdown-body .highlight {
     margin-bottom: 16px;
 }
@@ -485,18 +475,6 @@
 
 .markdown-body pre {
     word-wrap: normal;
-}
-
-.markdown-body pre code {
-    display: inline;
-    max-width: initial;
-    padding: 0;
-    margin: 0;
-    overflow: initial;
-    line-height: inherit;
-    word-wrap: normal;
-    background-color: transparent;
-    border: 0;
 }
 
 .markdown-body pre code:before,

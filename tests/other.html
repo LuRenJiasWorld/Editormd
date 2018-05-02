@@ -34,7 +34,6 @@
 			var testEditor;
 
             $(function() {
-
                 testEditor = editormd("test-editormd", {
                     width: "90%",
                     height: 740,
@@ -52,11 +51,17 @@
                     imageUpload : true,
                     imageFormats : ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
                     imageUploadURL : "../examples/php/upload.php",
+                    prismTheme : "default",
+                    prismLineHighlight : true,
                     onload : function() {
                         //console.log('onload', this);
                     }
                 });
             });
+
+            editormd.prism = {
+                url: '//cdn.bootcss.com/prism/1.14.0'
+            };
         </script>
     </body>
 </html>

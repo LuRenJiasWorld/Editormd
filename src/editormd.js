@@ -214,6 +214,8 @@
         flowChart: false, // flowChart.js only support IE9+
         sequenceDiagram: false, // sequenceDiagram.js only support IE9+
         previewCodeHighlight: true,
+        prismTheme: "default", // Prism Theme Style
+        prismLineHighlight : false,
         toolbar: true, // show/hide toolbar
         toolbarAutoFixed: true, // on window scroll auto fixed position
         toolbarIcons: "full",
@@ -512,6 +514,19 @@
                     classPrefix + "preview-theme-" + settings.previewTheme
                 )
             }
+            if (settings.prismTheme !== "") {
+                if (settings.prismTheme === 'default')  {
+                    editormd.loadCSS(editormd.prism.url + '/themes/prism.min');
+                } else {
+                    editormd.loadCSS(editormd.prism.url + '/themes/prism-'+ settings.prismTheme +'.min');
+                }
+            }
+
+            if (settings.prismLineHighlight === true) {
+                editormd.loadCSS(editormd.prism.url + '/plugins/line-highlight/prism-line-highlight.min');
+                editormd.loadScript(editormd.prism.url + '/plugins/line-highlight/prism-line-highlight.min');
+            }
+
             if (typeof define === "function" && define.amd) {
                 if (typeof katex !== "undefined") {
                     editormd.$katex = katex
@@ -600,12 +615,10 @@
                 }
             }
 
-            editormd.loadCSS(loadPath + "codemirror/lib/codemirror")
+            editormd.loadCSS(loadPath + "codemirror/lib/codemirror");
             if (settings.searchReplace && !settings.readOnly) {
-                editormd.loadCSS(loadPath + "codemirror/addon/dialog/dialog")
-                editormd.loadCSS(
-                    loadPath + "codemirror/addon/search/matchesonscrollbar"
-                )
+                editormd.loadCSS(loadPath + "codemirror/addon/dialog/dialog");
+                editormd.loadCSS(loadPath + "codemirror/addon/search/matchesonscrollbar")
             }
             if (settings.codeFold) {
                 editormd.loadCSS(loadPath + "codemirror/addon/fold/foldgutter")
@@ -624,7 +637,7 @@
                             editormd.$marked = marked
 
                             if (settings.previewCodeHighlight) {
-                                editormd.loadScript(loadPath + "prettify.min", function () {
+                                editormd.loadScript(loadPath + "prism.min", function () {
                                     loadFlowChartOrSequenceDiagram()
                                 })
                             } else {
@@ -1446,13 +1459,9 @@
             var settings = this.settings
             var previewContainer = this.previewContainer
             if (settings.previewCodeHighlight) {
-                previewContainer.find("pre").addClass("prettyprint linenums")
-                if (typeof prettyPrint !== "undefined") {
-                    prettyPrint()
-                }
+                previewContainer.find("pre").addClass("prism-highlight")
             }
-
-            return this
+            return Prism.highlightAll();
         },
 
         /**
@@ -1894,9 +1903,11 @@
                 pedantic: false,
                 sanitize: settings.htmlDecode ? false : true, // 关闭忽略HTML标签，即开启识别HTML标签，默认为false
                 smartLists: true,
-                smartypants: true
+                smartypants: true,
+                langPrefix: 'language-' //修改语言类名
             })
             marked.setOptions(markedOptions)
+
             var newMarkdownDoc = editormd.$marked(cmValue, markedOptions)
             newMarkdownDoc = editormd.filterHTMLTags(
                 newMarkdownDoc,
@@ -3061,12 +3072,12 @@
     editormd.emoji = {
         path: "//cdnjs.cloudflare.com/ajax/libs/emojify.js/1.1.0/images/basic/",
         ext: ".png"
-    }
+    };
     // Twitter Emoji (Twemoji)  graphics files url path
     editormd.twemoji = {
         path: "//cdnjs.cloudflare.com/ajax/libs/twemoji/2.6.0/36x36/",
         ext: ".png"
-    }
+    };
 
     /**
      * 自定义marked的解析器
@@ -3092,9 +3103,8 @@
         }
         var settings = $.extend(defaults, options || {})
         var marked = editormd.$marked
-        var markedRenderer = new marked.Renderer()
+        var markedRenderer = new marked.Renderer();
         markdownToC = markdownToC || []
-
         var regexs = editormd.regexs
         var atLinkReg = regexs.atLink
         var emojiReg = regexs.emoji
@@ -3333,7 +3343,7 @@
                     this.atLink(this.emoji(text)) +
                     "</p>\n"
         }
-        markedRenderer.code = function (code, lang, escaped) {
+        markedRenderer.code = function (code, lang, escaped, AAA) {
             if (lang === "seq" || lang === "sequence") {
                 return '<div class="sequence-diagram">' + code + "</div>"
             } else if (lang === "flow") {
@@ -3666,8 +3676,9 @@
             pedantic: false,
             sanitize: settings.htmlDecode ? false : true, // 是否忽略HTML标签，即是否开启HTML标签解析，为了安全性，默认不开启
             smartLists: true,
-            smartypants: true
-        }
+            smartypants: true,
+            langPrefix: 'language-' //修改语言类名
+        };
         markdownDoc = new String(markdownDoc)
         var markdownParsed = marked(markdownDoc, markedOptions)
         markdownParsed = editormd.filterHTMLTags(
@@ -3705,8 +3716,8 @@
             }
         }
         if (settings.previewCodeHighlight) {
-            div.find("pre").addClass("prettyprint linenums")
-            prettyPrint()
+            div.find("pre").addClass("prism-highlight")
+            Prism.highlightAll();
         }
         if (!editormd.isIE8) {
             if (settings.flowChart) {
@@ -3748,10 +3759,10 @@
 
     // Editor.md themes, change toolbar themes etc.
     // added @1.5.0
-    editormd.themes = ["default", "dark"]
+    editormd.themes = ["default", "dark"];
     // Preview area themes
     // added @1.5.0
-    editormd.previewThemes = ["default", "dark"]
+    editormd.previewThemes = ["default", "dark"];
     // CodeMirror / editor area themes
     // @1.5.0 rename -> editorThemes, old version -> themes
     editormd.editorThemes = [
@@ -3810,13 +3821,23 @@
         'xq-light',
         'yeti',
         'zenburn'
-    ]
-    editormd.loadPlugins = {}
+    ];
+    editormd.prismThemes = [
+        "default",
+        "dark",
+        "funky",
+        "okaidia",
+        "twilight",
+        "coy",
+        "solarizedlight",
+        "tomorrow"
+    ];
+    editormd.loadPlugins = {};
     editormd.loadFiles = {
         js: [],
         css: [],
         plugin: []
-    }
+    };
     /**
      * 动态加载Editor.md插件，但不立即执行
      * Load editor.md plugins
@@ -3913,6 +3934,11 @@
         } else {
             document.body.appendChild(script)
         }
+    };
+
+    // 自定义Prismjs地址
+    editormd.prism = {
+        url: '//cdnjs.cloudflare.com/ajax/libs/prism/1.14.0'
     };
 
     // 使用国外的CDN，加载速度有时会很慢，或者自定义URL

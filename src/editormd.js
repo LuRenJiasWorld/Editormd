@@ -3343,7 +3343,7 @@
                     this.atLink(this.emoji(text)) +
                     "</p>\n"
         }
-        markedRenderer.code = function (code, lang, escaped, AAA) {
+        markedRenderer.code = function (code, lang, escaped) {
             if (lang === "seq" || lang === "sequence") {
                 return '<div class="sequence-diagram">' + code + "</div>"
             } else if (lang === "flow") {

@@ -42,7 +42,6 @@
     }
 
     code {
-        border: 1px solid $borderColor;
         background: #f6f6f6;
         padding: 3px;
         border-radius: 3px;
@@ -54,10 +53,6 @@
         background: #f6f6f6;
         padding: 10px;
         @include border-radius(3px);
-
-        code {
-            padding: 0;
-        }
     }
 
     pre, code, kbd {
@@ -102,34 +97,6 @@
         text {
             font-size: 15px !important;
             font-family: "YaHei Consolas Hybrid", Consolas, "Microsoft YaHei", "Malgun Gothic", "Segoe UI", Helvetica, Arial, sans-serif !important;
-        }
-    }
-}
-
-//Pretty printing styles. Used with prettify.js.
-
-@import "prettify";
-
-#{$prefix}preview-container, #{$prefix}html-preview {
-    pre.prettyprint {
-        padding: 10px;
-        border: 1px solid $borderColor;
-        white-space: pre-wrap;
-        word-wrap: break-word;
-    }
-
-    ol.linenums {
-        color: #999;
-        padding-left: 2.5em;
-
-        li {
-            list-style-type: decimal;
-
-            code {
-                border: none;
-                background: none;
-                padding: 0;
-            }
         }
     }
 }

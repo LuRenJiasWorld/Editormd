@@ -215,7 +215,7 @@
         sequenceDiagram: false, // sequenceDiagram.js only support IE9+
         previewCodeHighlight: true,
         prismTheme: "default", // Prism Theme Style
-        prismLineHighlight : false,
+        prismLineNumbers : false,
         toolbar: true, // show/hide toolbar
         toolbarAutoFixed: true, // on window scroll auto fixed position
         toolbarIcons: "full",
@@ -522,9 +522,9 @@
                 }
             }
 
-            if (settings.prismLineHighlight === true) {
-                editormd.loadCSS(editormd.prism.url + '/plugins/line-highlight/prism-line-highlight.min');
-                editormd.loadScript(editormd.prism.url + '/plugins/line-highlight/prism-line-highlight.min');
+            if (settings.prismLineNumbers === true) {
+                editormd.loadCSS(editormd.prism.url + '/plugins/line-numbers/prism-line-numbers.min');
+                editormd.loadScript(editormd.prism.url + '/plugins/line-numbers/prism-line-numbers.min');
             }
 
             if (typeof define === "function" && define.amd) {
@@ -1456,10 +1456,13 @@
          */
 
         previewCodeHighlight: function () {
-            var settings = this.settings
-            var previewContainer = this.previewContainer
+            var settings = this.settings;
+            var previewContainer = this.previewContainer;
             if (settings.previewCodeHighlight) {
-                previewContainer.find("pre").addClass("prism-highlight")
+                previewContainer.find("pre").addClass("prism-highlight");
+            }
+            if (settings.prismLineNumbers) {
+                previewContainer.find("pre").addClass("line-numbers");
             }
             return Prism.highlightAll();
         },
@@ -3716,7 +3719,11 @@
             }
         }
         if (settings.previewCodeHighlight) {
-            div.find("pre").addClass("prism-highlight")
+            div.find("pre").addClass("prism-highlight");
+            Prism.highlightAll();
+        }
+        if (settings.prismLineNumbers) {
+            previewContainer.find("pre").addClass("line-numbers");
             Prism.highlightAll();
         }
         if (!editormd.isIE8) {

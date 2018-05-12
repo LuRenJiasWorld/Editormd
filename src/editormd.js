@@ -215,7 +215,8 @@
         sequenceDiagram: false, // sequenceDiagram.js only support IE9+
         previewCodeHighlight: true,
         prismTheme: "default", // Prism Theme Style
-        prismLineNumbers : false,
+        prismLineNumbers: false,
+        mind: false,
         toolbar: true, // show/hide toolbar
         toolbarAutoFixed: true, // on window scroll auto fixed position
         toolbarIcons: "full",
@@ -231,9 +232,9 @@
         toolbarCustomIcons: {
             // using html tag create toolbar icon, unused default <a> tag.
             lowercase:
-                '<a href="javascript:;" title="Lowercase" unselectable="on"><i class="fa" name="lowercase" style="font-size:24px;margin-top: -10px;">a</i></a>',
+                "<a href=\"javascript:;\" title=\"Lowercase\" unselectable=\"on\"><i class=\"fa\" name=\"lowercase\" style=\"font-size:24px;margin-top: -10px;\">a</i></a>",
             ucwords:
-                '<a href="javascript:;" title="ucwords" unselectable="on"><i class="fa" name="ucwords" style="font-size:20px;margin-top: -3px;">Aa</i></a>'
+                "<a href=\"javascript:;\" title=\"ucwords\" unselectable=\"on\"><i class=\"fa\" name=\"ucwords\" style=\"font-size:20px;margin-top: -3px;\">Aa</i></a>"
         },
         toolbarIconsClass: {
             undo: "fa-undo",
@@ -375,7 +376,7 @@
     };
     editormd.classNames = {
         inline_tex: editormd.classPrefix + "inline-tex",
-        block_tex: editormd.classPrefix + 'block-tex'
+        block_tex: editormd.classPrefix + "block-tex"
     };
     editormd.dialogZindex = 99999;
     editormd.$katex = null;
@@ -383,7 +384,7 @@
     editormd.$CodeMirror = null;
     editormd.$prettyPrint = null;
 
-    var timer, flowchartTimer;
+    var timer, flowchartTimer, mindTimer;
 
     editormd.prototype = editormd.fn = {
         state: {
@@ -471,26 +472,26 @@
             }
             var appendElements = [
                 !settings.readOnly
-                    ? '<a href="javascript:;" class="fa fa-close ' +
+                    ? "<a href=\"javascript:;\" class=\"fa fa-close " +
                     classPrefix +
-                    'preview-close-btn"></a>'
+                    "preview-close-btn\"></a>"
                     : "",
                 settings.saveHTMLToTextarea
-                    ? '<textarea class="' +
+                    ? "<textarea class=\"" +
                     classNames.textarea.html +
-                    '" name="' +
+                    "\" name=\"" +
                     id +
-                    '-html-code"></textarea>'
+                    "-html-code\"></textarea>"
                     : "",
-                '<div class="' +
+                "<div class=\"" +
                 classPrefix +
-                'preview"><div class="markdown-body ' +
+                "preview\"><div class=\"markdown-body " +
                 classPrefix +
-                'preview-container"></div></div>',
-                '<div class="' +
+                "preview-container\"></div></div>",
+                "<div class=\"" +
                 classPrefix +
-                'container-mask" style="display:block;"></div>',
-                '<div class="' + classPrefix + 'mask"></div>'
+                "container-mask\" style=\"display:block;\"></div>",
+                "<div class=\"" + classPrefix + "mask\"></div>"
             ].join("\n");
             editor.append(appendElements).addClass(classPrefix + "vertical");
             if (settings.theme !== "") {
@@ -515,16 +516,16 @@
                 )
             }
             if (settings.prismTheme !== "") {
-                if (settings.prismTheme === 'default')  {
-                    editormd.loadCSS(editormd.prism.url + '/themes/prism.min');
+                if (settings.prismTheme === "default") {
+                    editormd.loadCSS(editormd.prism.url + "/themes/prism.min");
                 } else {
-                    editormd.loadCSS(editormd.prism.url + '/themes/prism-'+ settings.prismTheme +'.min');
+                    editormd.loadCSS(editormd.prism.url + "/themes/prism-" + settings.prismTheme + ".min");
                 }
             }
 
-            if (settings.prismLineNumbers === true) {
-                editormd.loadCSS(editormd.prism.url + '/plugins/line-numbers/prism-line-numbers.min');
-                editormd.loadScript(editormd.prism.url + '/plugins/line-numbers/prism-line-numbers.min');
+            if (settings.prismLineNumbers) {
+                editormd.loadCSS(editormd.prism.url + "/plugins/line-numbers/prism-line-numbers.min");
+                editormd.loadScript(editormd.prism.url + "/plugins/line-numbers/prism-line-numbers.min");
             }
 
             if (typeof define === "function" && define.amd) {
@@ -622,6 +623,15 @@
             }
             if (settings.codeFold) {
                 editormd.loadCSS(loadPath + "codemirror/addon/fold/foldgutter")
+            }
+            if (settings.mind) {
+                if (settings.autoLoadModules) {
+                    editormd.loadScript(loadPath + "mindMap", function () {
+                        _this.mindRender();
+                    });
+                } else {
+                    this.mindRender();
+                }
             }
             editormd.loadScript(loadPath + "codemirror/lib/codemirror", function () {
                 editormd.$CodeMirror = CodeMirror
@@ -1112,13 +1122,13 @@
             ))
             if (settings.toolbar && toolbar.length < 1) {
                 var toolbarHTML =
-                    '<div class="' +
+                    "<div class=\"" +
                     classPrefix +
-                    'toolbar"><div class="' +
+                    "toolbar\"><div class=\"" +
                     classPrefix +
-                    'toolbar-container"><ul class="' +
+                    "toolbar-container\"><ul class=\"" +
                     classPrefix +
-                    'menu"></ul></div></div>'
+                    "menu\"></ul></div></div>"
                 editor.append(toolbarHTML)
                 toolbar = this.toolbar = editor.children("." + classPrefix + "toolbar")
             }
@@ -1141,7 +1151,7 @@
                 if (name === "||") {
                     pullRight = true
                 } else if (name === "|") {
-                    menu += '<li class="divider" unselectable="on">|</li>'
+                    menu += "<li class=\"divider\" unselectable=\"on\">|</li>"
                 } else {
                     var isHeader = /h(\d)/.test(name)
                     var index = name
@@ -1154,7 +1164,7 @@
                     title = typeof title === "undefined" ? "" : title
                     iconTexts = typeof iconTexts === "undefined" ? "" : iconTexts
                     iconClass = typeof iconClass === "undefined" ? "" : iconClass
-                    var menuItem = pullRight ? '<li class="pull-right">' : "<li>"
+                    var menuItem = pullRight ? "<li class=\"pull-right\">" : "<li>"
                     if (
                         typeof settings.toolbarCustomIcons[name] !== "undefined" &&
                         typeof settings.toolbarCustomIcons[name] !== "function"
@@ -1162,13 +1172,13 @@
                         menuItem += settings.toolbarCustomIcons[name]
                     } else {
                         menuItem +=
-                            '<a href="javascript:;" title="' + title + '" unselectable="on">'
+                            "<a href=\"javascript:;\" title=\"" + title + "\" unselectable=\"on\">"
                         menuItem +=
-                            '<i class="fa ' +
+                            "<i class=\"fa " +
                             iconClass +
-                            '" name="' +
+                            "\" name=\"" +
                             name +
-                            '" unselectable="on">' +
+                            "\" unselectable=\"on\">" +
                             (isHeader
                                 ? name.toUpperCase()
                                 : iconClass === "" ? iconTexts : "") +
@@ -1181,10 +1191,10 @@
             }
             toolbarMenu.html(menu)
             toolbarMenu
-                .find('[title="Lowercase"]')
+                .find("[title=\"Lowercase\"]")
                 .attr("title", settings.lang.toolbar.lowercase)
             toolbarMenu
-                .find('[title="ucwords"]')
+                .find("[title=\"ucwords\"]")
                 .attr("title", settings.lang.toolbar.ucwords)
             this.setToolbarHandler()
             this.setToolbarAutoFixed()
@@ -1302,28 +1312,28 @@
             var editor = this.editor
             var classPrefix = this.classPrefix
             var infoDialogHTML = [
-                '<div class="' +
+                "<div class=\"" +
                 classPrefix +
                 "dialog " +
                 classPrefix +
-                'dialog-info" style="">',
-                '<div class="' + classPrefix + 'dialog-container">',
-                '<h1><i class="editormd-logo editormd-logo-lg editormd-logo-color"></i> ' +
+                "dialog-info\" style=\"\">",
+                "<div class=\"" + classPrefix + "dialog-container\">",
+                "<h1><i class=\"editormd-logo editormd-logo-lg editormd-logo-color\"></i> " +
                 editormd.title +
                 "<small>v" +
                 editormd.version +
                 "</small></h1>",
                 "<p>" + this.lang.description + "</p>",
-                '<p style="margin: 10px 0 20px 0;"><a href="' +
+                "<p style=\"margin: 10px 0 20px 0;\"><a href=\"" +
                 editormd.homePage +
-                '" target="_blank">' +
+                "\" target=\"_blank\">" +
                 editormd.homePage +
-                ' <i class="fa fa-external-link"></i></a></p>',
-                '<p style="font-size: 0.85em;">Copyright &copy; 2015 <a href="https://github.com/pandao" target="_blank" class="hover-link">Pandao</a>, The <a href="https://github.com/pandao/editor.md/blob/master/LICENSE" target="_blank" class="hover-link">MIT</a> License.</p>',
+                " <i class=\"fa fa-external-link\"></i></a></p>",
+                "<p style=\"font-size: 0.85em;\">Copyright &copy; 2015 <a href=\"https://github.com/pandao\" target=\"_blank\" class=\"hover-link\">Pandao</a>, The <a href=\"https://github.com/pandao/editor.md/blob/master/LICENSE\" target=\"_blank\" class=\"hover-link\">MIT</a> License.</p>",
                 "</div>",
-                '<a href="javascript:;" class="fa fa-close ' +
+                "<a href=\"javascript:;\" class=\"fa fa-close " +
                 classPrefix +
-                'dialog-close"></a>',
+                "dialog-close\"></a>",
                 "</div>"
             ].join("\n")
             editor.append(infoDialogHTML)
@@ -1480,17 +1490,37 @@
             }
             //行内公式
             this.previewContainer.find("." + editormd.classNames.inline_tex).each(function () {
-                    var tex = $(this);
-                    editormd.$katex.render(tex.text(), tex[0]);
-                    tex.find(".katex").css("font-size", "1.6em");
+                var tex = $(this);
+                editormd.$katex.render(tex.text(), tex[0]);
+                tex.find(".katex").css("font-size", "1.6em");
             });
             //多行公式
             this.previewContainer.find("." + editormd.classNames.block_tex).each(function () {
                 var tex = $(this);
-                editormd.$katex.render(tex.text(), tex[0],{displayMode:true});
+                editormd.$katex.render(tex.text(), tex[0], {displayMode: true});
                 tex.find(".katex").css("font-size", "1.6em");
             });
             return this
+        },
+
+        /**
+         * 解析和渲染思维导图
+         * mindmap Renderer
+         *
+         * @returns {editormd}             返回editormd的实例对象
+         */
+        mindRender: function () {
+            if (mindTimer === null) {
+                return this;
+            }
+            this.previewContainer.find(".mind").each(function () {
+                var mind = $(this);
+                mind.drawMind();
+            });
+
+            //$('.mind').drawMind();
+
+            return this;
         },
 
         /**
@@ -1907,7 +1937,7 @@
                 sanitize: settings.htmlDecode ? false : true, // 关闭忽略HTML标签，即开启识别HTML标签，默认为false
                 smartLists: true,
                 smartypants: true,
-                langPrefix: 'language-' //修改语言类名
+                langPrefix: "language-" //修改语言类名
             })
             marked.setOptions(markedOptions)
 
@@ -1915,25 +1945,37 @@
             newMarkdownDoc = editormd.filterHTMLTags(
                 newMarkdownDoc,
                 settings.htmlDecode
-            )
-            this.markdownTextarea.text(cmValue)
-            cm.save()
+            );
+
+            // FIXED marked.js render table structure with br tag inside, so this make it removed
+            function removeBrTagInTable(text) {
+                var tableRegex = /<table[^>]*(.|[\n\r])*?<\/table>/gim;
+                text = text.replace(tableRegex, function ($1, $2) {
+                    return $1.replace(/<br>\s*/g, "")
+                });
+                return text;
+            }
+
+            newMarkdownDoc = removeBrTagInTable(newMarkdownDoc);
+            this.markdownTextarea.text(cmValue);
+            cm.save();
             if (settings.saveHTMLToTextarea) {
                 this.htmlTextarea.text(newMarkdownDoc)
             }
             if (settings.watch || (!settings.watch && state.preview)) {
-                previewContainer.html(newMarkdownDoc)
-                this.previewCodeHighlight()
+                previewContainer.html(newMarkdownDoc);
+                this.previewCodeHighlight();
+                this.mindRender();
                 if (settings.toc) {
                     var tocContainer =
                         settings.tocContainer === ""
                             ? previewContainer
-                            : $(settings.tocContainer)
+                            : $(settings.tocContainer);
                     var tocMenu = tocContainer.find("." + this.classPrefix + "toc-menu")
                     tocContainer.attr(
                         "previewContainer",
                         settings.tocContainer === "" ? "true" : "false"
-                    )
+                    );
                     if (settings.tocContainer !== "" && tocMenu.length > 0) {
                         tocMenu.remove()
                     }
@@ -1942,7 +1984,7 @@
                         tocContainer,
                         settings.tocDropdown,
                         settings.tocStartLevel
-                    )
+                    );
                     if (
                         settings.tocDropdown ||
                         tocContainer.find("." + this.classPrefix + "toc-menu").length > 0
@@ -1956,15 +1998,16 @@
                         previewContainer.find(".markdown-toc").css("border", "none")
                     }
                 }
+
                 if (settings.tex) {
                     if (!editormd.kaTeXLoaded && settings.autoLoadModules) {
                         editormd.loadKaTeX(function () {
-                            editormd.$katex = katex
-                            editormd.kaTeXLoaded = true
+                            editormd.$katex = katex;
+                            editormd.kaTeXLoaded = true;
                             _this.katexRender()
                         })
                     } else {
-                        editormd.$katex = katex
+                        editormd.$katex = katex;
                         this.katexRender()
                     }
                 }
@@ -1975,6 +2018,7 @@
                         flowchartTimer = null
                     }, 10)
                 }
+
                 if (state.loaded) {
                     $.proxy(settings.onchange, this)()
                 }
@@ -2914,6 +2958,7 @@
         }
         return obj;
     }
+
     editormd.keyMaps = ((_editormd$keyMaps = {}),
             _defineProperty(_editormd$keyMaps, key + "-1", "h1"),
             _defineProperty(_editormd$keyMaps, key + "-2", "h2"),
@@ -2945,7 +2990,7 @@
                 var cm = this.cm;
                 var cursor = cm.getCursor();
                 var selection = cm.getSelection();
-                var title = selection === "" ? "" : ' "' + selection + '"';
+                var title = selection === "" ? "" : " \"" + selection + "\"";
                 cm.replaceSelection("[" + selection + "](" + title + ")");
                 if (selection === "") {
                     cm.setCursor(cursor.line, cursor.ch + 1);
@@ -2990,7 +3035,7 @@
                 var cm = this.cm;
                 var cursor = cm.getCursor();
                 var selection = cm.getSelection();
-                var title = selection === "" ? "" : ' "' + selection + '"';
+                var title = selection === "" ? "" : " \"" + selection + "\"";
                 cm.replaceSelection("![" + selection + "](" + title + ")");
                 if (selection === "") {
                     cm.setCursor(cursor.line, cursor.ch + 4);
@@ -3141,11 +3186,11 @@
                         for (var fa = 0, len1 = faMatchs.length; fa < len1; fa++) {
                             var faName = faMatchs[fa].replace(/:/g, "")
                             return (
-                                '<i class="fa ' +
+                                "<i class=\"fa " +
                                 faName +
-                                ' fa-emoji" title="' +
+                                " fa-emoji\" title=\"" +
                                 faName.replace("fa-", "") +
-                                '"></i>'
+                                "\"></i>"
                             )
                         }
                     } else {
@@ -3155,26 +3200,26 @@
                             for (var x = 0, len2 = emdlogoMathcs.length; x < len2; x++) {
                                 var logoName = emdlogoMathcs[x].replace(/:/g, "")
                                 return (
-                                    '<i class="' +
+                                    "<i class=\"" +
                                     logoName +
-                                    '" title="Editor.md logo (' +
+                                    "\" title=\"Editor.md logo (" +
                                     logoName +
-                                    ')"></i>'
+                                    ")\"></i>"
                                 )
                             }
                         } else if (twemojiMatchs) {
                             for (var t = 0, len3 = twemojiMatchs.length; t < len3; t++) {
                                 var twe = twemojiMatchs[t].replace(/:/g, "").replace("tw-", "")
                                 return (
-                                    '<img src="' +
+                                    "<img src=\"" +
                                     editormd.twemoji.path +
                                     twe +
                                     editormd.twemoji.ext +
-                                    '" title="twemoji-' +
+                                    "\" title=\"twemoji-" +
                                     twe +
-                                    '" alt="twemoji-' +
+                                    "\" alt=\"twemoji-" +
                                     twe +
-                                    '" class="emoji twemoji" />'
+                                    "\" class=\"emoji twemoji\" />"
                                 )
                             }
                         } else {
@@ -3182,15 +3227,15 @@
                             src = src === "black_large_square" ? "black_square" : src
                             src = src === "moon" ? "waxing_gibbous_moon" : src
                             return (
-                                '<img src="' +
+                                "<img src=\"" +
                                 editormd.emoji.path +
                                 src +
                                 editormd.emoji.ext +
-                                '" class="emoji" title="&#58;' +
+                                "\" class=\"emoji\" title=\"&#58;" +
                                 name +
-                                '&#58;" alt="&#58;' +
+                                "&#58;\" alt=\"&#58;" +
                                 name +
-                                '&#58;" />'
+                                "&#58;\" />"
                             )
                         }
                     }
@@ -3208,13 +3253,13 @@
                     text = text
                         .replace(atLinkReg, function ($1, $2) {
                             return (
-                                '<a href="' +
+                                "<a href=\"" +
                                 editormd.urls.atLinkBase +
                                 "" +
                                 $2 +
-                                '" title="&#64;' +
+                                "\" title=\"&#64;" +
                                 $2 +
-                                '" class="at-link">' +
+                                "\" class=\"at-link\">" +
                                 $1 +
                                 "</a>"
                             )
@@ -3225,7 +3270,7 @@
                     text = text.replace(emailLinkReg, function ($1, $2, $3, $4, $5) {
                         return !$2 &&
                         $.inArray($5, "jpg|jpeg|png|gif|webp|ico|icon|pdf".split("|")) < 0
-                            ? '<a href="mailto:' + $1 + '">' + $1 + "</a>"
+                            ? "<a href=\"mailto:" + $1 + "\">" + $1 + "</a>"
                             : $1
                     })
                 }
@@ -3247,15 +3292,15 @@
                     return ""
                 }
             }
-            var out = '<a href="' + href + '"'
+            var out = "<a href=\"" + href + "\""
             if (atLinkReg.test(title) || atLinkReg.test(text)) {
                 if (title) {
-                    out += ' title="' + title.replace(/@/g, "&#64;")
+                    out += " title=\"" + title.replace(/@/g, "&#64;")
                 }
-                return out + '">' + text.replace(/@/g, "&#64;") + "</a>"
+                return out + "\">" + text.replace(/@/g, "&#64;") + "</a>"
             }
             if (title) {
-                out += ' title="' + title + '"'
+                out += " title=\"" + title + "\""
             }
             out += ">" + text + "</a>"
             return out
@@ -3288,14 +3333,14 @@
             var headingHTML =
                 "<h" +
                 level +
-                ' id="h' +
+                " id=\"h" +
                 level +
                 "-" +
                 this.options.headerPrefix +
                 id +
-                '">'
-            headingHTML += '<a name="' + text + '" class="reference-link"></a>'
-            headingHTML += '<span class="header-link octicon octicon-link"></span>'
+                "\">"
+            headingHTML += "<a name=\"" + text + "\" class=\"reference-link\"></a>"
+            headingHTML += "<span class=\"header-link octicon octicon-link\"></span>"
             headingHTML += hasLinkReg
                 ? this.atLink(this.emoji(linkText))
                 : this.atLink(this.emoji(text))
@@ -3305,7 +3350,7 @@
         markedRenderer.pageBreak = function (text) {
             if (pageBreakReg.test(text) && settings.pageBreak) {
                 text =
-                    '<hr style="page-break-after:always;" class="page-break editormd-page-break" />'
+                    "<hr style=\"page-break-after:always;\" class=\"page-break editormd-page-break\" />"
             }
             return text
         }
@@ -3313,7 +3358,7 @@
             var isTeXInline = /\$\$?([\s\S]*)\$?\$/g.test(text);
             var isTeXLine = /^\$\$?([\s\S]*)\$?\$$/.test(text);
             var isTeXAddClass = isTeXLine
-                ? ' class="' + editormd.classNames.inline_tex + '"'
+                ? " class=\"" + editormd.classNames.inline_tex + "\""
                 : "";
             var isToC = settings.tocm
                 ? /^(\[TOC\]|\[TOCM\])$/i.test(text)
@@ -3322,9 +3367,9 @@
             if (!isTeXLine && isTeXInline) {
                 text = text.replace(/(\$\$?([^\$]*)\$?\$)+/g, function ($1, $2) {
                     return (
-                        '<span class="' +
+                        "<span class=\"" +
                         editormd.classNames.inline_tex +
-                        '">' +
+                        "\">" +
                         $2.replace(/\$/g, "") +
                         "</span>"
                     )
@@ -3333,10 +3378,10 @@
                 text = isTeXLine ? text.replace(/\$/g, "") : text;
             }
             var tocHTML =
-                '<div class="markdown-toc editormd-markdown-toc">' + text + "</div>"
+                "<div class=\"markdown-toc editormd-markdown-toc\">" + text + "</div>"
             return isToC
                 ? isToCMenu
-                    ? '<div class="editormd-toc-menu">' + tocHTML + "</div><br/>"
+                    ? "<div class=\"editormd-toc-menu\">" + tocHTML + "</div><br/>"
                     : tocHTML
                 : pageBreakReg.test(text)
                     ? this.pageBreak(text)
@@ -3348,11 +3393,17 @@
         }
         markedRenderer.code = function (code, lang, escaped) {
             if (lang === "seq" || lang === "sequence") {
-                return '<div class="sequence-diagram">' + code + "</div>"
+                return "<div class=\"sequence-diagram\">" + code + "</div>"
             } else if (lang === "flow") {
-                return '<div class="flowchart">' + code + "</div>"
+                return "<div class=\"flowchart\">" + code + "</div>"
+            } else if (lang === "tlog") {
+                return "<div class=\"tlog\">" + code + "</div>";
+            } else if (lang === "mind") {
+                // console.log("mind\n", parseList(code));
+                //console.log(code);
+                return "<div class=\"mind\" style=\"width: 100%;overflow-x: auto;\"><canvas id=\"canvas\"></canvas><div class=\"mindTxt\">" + code + "</div></div>";
             } else if (lang === "math" || lang === "latex" || lang === "katex") {
-                return '<p class="' + editormd.classNames.block_tex + '">' + code + "</p>"
+                return "<p class=\"" + editormd.classNames.block_tex + "\">" + code + "</p>"
             } else {
                 return marked.Renderer.prototype.code.apply(this, arguments)
             }
@@ -3360,7 +3411,7 @@
         markedRenderer.tablecell = function (content, flags) {
             var type = flags.header ? "th" : "td"
             var tag = flags.align
-                ? "<" + type + ' style="text-align:' + flags.align + '">'
+                ? "<" + type + " style=\"text-align:" + flags.align + "\">"
                 : "<" + type + ">"
             return tag + this.atLink(this.emoji(content)) + "</" + type + ">\n"
         }
@@ -3369,14 +3420,14 @@
                 text = text
                     .replace(
                         /^\s*\[\s\]\s*/,
-                        '<input type="checkbox" class="task-list-item-checkbox" /> '
+                        "<input type=\"checkbox\" class=\"task-list-item-checkbox\" /> "
                     )
                     .replace(
                         /^\s*\[x\]\s*/,
-                        '<input type="checkbox" class="task-list-item-checkbox" checked disabled /> '
+                        "<input type=\"checkbox\" class=\"task-list-item-checkbox\" checked disabled /> "
                     )
                 return (
-                    '<li style="list-style: none;">' +
+                    "<li style=\"list-style: none;\">" +
                     this.atLink(this.emoji(text)) +
                     "</li>"
                 )
@@ -3436,13 +3487,13 @@
                 html += "</ul></li>"
             }
             html +=
-                '<li><a class="toc-level-' +
+                "<li><a class=\"toc-level-" +
                 level +
-                '" href="#' +
+                "\" href=\"#" +
                 text +
-                '" level="' +
+                "\" level=\"" +
                 level +
-                '">' +
+                "\">" +
                 text +
                 "</a><ul>"
         }
@@ -3454,18 +3505,18 @@
             container.attr("previewContainer") === "false"
         ) {
             var tocHTML =
-                '<div class="markdown-toc ' + classPrefix + 'markdown-toc"></div>'
+                "<div class=\"markdown-toc " + classPrefix + "markdown-toc\"></div>"
             tocHTML = tocDropdown
-                ? '<div class="' + classPrefix + 'toc-menu">' + tocHTML + "</div>"
+                ? "<div class=\"" + classPrefix + "toc-menu\">" + tocHTML + "</div>"
                 : tocHTML
             container.html(tocHTML)
             tocContainer = container.find(".markdown-toc")
         }
         if (tocDropdown) {
-            tocContainer.wrap('<div class="' + classPrefix + 'toc-menu"></div><br/>')
+            tocContainer.wrap("<div class=\"" + classPrefix + "toc-menu\"></div><br/>")
         }
         tocContainer
-            .html('<ul class="markdown-toc-list"></ul>')
+            .html("<ul class=\"markdown-toc-list\"></ul>")
             .children(".markdown-toc-list")
             .html(html.replace(/\r?\n?<ul\><\/ul\>/g, ""))
         return tocContainer
@@ -3488,9 +3539,9 @@
         tocMenus.each(function () {
             var $this = $(this)
             var toc = $this.children(".markdown-toc")
-            var icon = '<i class="fa fa-angle-down"></i>'
+            var icon = "<i class=\"fa fa-angle-down\"></i>"
             var btn =
-                '<a href="javascript:;" class="toc-menu-btn">' +
+                "<a href=\"javascript:;\" class=\"toc-menu-btn\">" +
                 icon +
                 tocTitle +
                 "</a>"
@@ -3572,11 +3623,11 @@
                     var _attrs = $($1)[0].attributes
                     var $attrs = {}
                     $.each(_attrs, function (i, e) {
-                        if (e.nodeName !== '"') {
+                        if (e.nodeName !== "\"") {
                             $attrs[e.nodeName] = e.nodeValue
                             //   fixed <a href="javascript:alert('xss')"> will cause xss problem
-                            if (e.nodeName === "href" && e.nodeValue.toLowerCase().indexOf('javascript:') >= 0) {
-                                $attrs[e.nodeName] = 'javascript:;';
+                            if (e.nodeName === "href" && e.nodeValue.toLowerCase().indexOf("javascript:") >= 0) {
+                                $attrs[e.nodeName] = "javascript:;";
                             }
                         }
                     })
@@ -3641,6 +3692,7 @@
             taskList: false, // Github Flavored Markdown task lists
             emoji: false,
             flowChart: false,
+            mind: false,
             sequenceDiagram: false,
             previewCodeHighlight: true
         }
@@ -3680,7 +3732,7 @@
             sanitize: settings.htmlDecode ? false : true, // 是否忽略HTML标签，即是否开启HTML标签解析，为了安全性，默认不开启
             smartLists: true,
             smartypants: true,
-            langPrefix: 'language-' //修改语言类名
+            langPrefix: "language-" //修改语言类名
         };
         markdownDoc = new String(markdownDoc)
         var markdownParsed = marked(markdownDoc, markedOptions)
@@ -3688,6 +3740,17 @@
             markdownParsed,
             settings.htmlDecode
         )
+
+        // FIXED marked.js render table structure with br tag inside, so this make it removed
+        function removeBrTagInTable(text) {
+            var tableRegex = /<table[^>]*(.|[\n\r])*?<\/table>/gim;
+            text = text.replace(tableRegex, function ($1, $2) {
+                return $1.replace(/<br>\s*/g, "")
+            });
+            return text;
+        }
+
+        markdownParsed = removeBrTagInTable(markdownParsed)
         if (settings.markdownSourceCode) {
             saveTo.text(markdownDoc)
         } else {
@@ -3758,6 +3821,12 @@
                 katexHandle()
             }
         }
+        if (settings.mind) {
+            div.find(".mind").each(function() {
+                var mind = $(this);
+                mind.drawMind();
+            });
+        }
         div.getMarkdown = function () {
             return saveTo.val()
         }
@@ -3773,61 +3842,61 @@
     // CodeMirror / editor area themes
     // @1.5.0 rename -> editorThemes, old version -> themes
     editormd.editorThemes = [
-        'default',
-        '3024-day',
-        '3024-night',
-        'abcdef',
-        'ambiance',
-        'ambiance-mobile',
-        'base16-dark',
-        'base16-light',
-        'bespin',
-        'blackboard',
-        'cobalt',
-        'colorforth',
-        'dracula',
-        'duotone-dark',
-        'duotone-light',
-        'eclipse',
-        'elegant',
-        'erlang-dark',
-        'gruvbox-dark',
-        'hopscotch',
-        'icecoder',
-        'idea',
-        'isotope',
-        'lesser-dark',
-        'liquibyte',
-        'lucario',
-        'material',
-        'mbo',
-        'mdn-like',
-        'midnight',
-        'monokai',
-        'neat',
-        'neo',
-        'night',
-        'oceanic-next',
-        'panda-syntax',
-        'paraiso-dark',
-        'paraiso-light',
-        'pastel-on-dark',
-        'railscasts',
-        'rubyblue',
-        'seti',
-        'shadowfox',
-        'solarized',
-        'ssms',
-        'the-matrix',
-        'tomorrow-night-bright',
-        'tomorrow-night-eighties',
-        'ttcn',
-        'twilight',
-        'vibrant-ink',
-        'xq-dark',
-        'xq-light',
-        'yeti',
-        'zenburn'
+        "default",
+        "3024-day",
+        "3024-night",
+        "abcdef",
+        "ambiance",
+        "ambiance-mobile",
+        "base16-dark",
+        "base16-light",
+        "bespin",
+        "blackboard",
+        "cobalt",
+        "colorforth",
+        "dracula",
+        "duotone-dark",
+        "duotone-light",
+        "eclipse",
+        "elegant",
+        "erlang-dark",
+        "gruvbox-dark",
+        "hopscotch",
+        "icecoder",
+        "idea",
+        "isotope",
+        "lesser-dark",
+        "liquibyte",
+        "lucario",
+        "material",
+        "mbo",
+        "mdn-like",
+        "midnight",
+        "monokai",
+        "neat",
+        "neo",
+        "night",
+        "oceanic-next",
+        "panda-syntax",
+        "paraiso-dark",
+        "paraiso-light",
+        "pastel-on-dark",
+        "railscasts",
+        "rubyblue",
+        "seti",
+        "shadowfox",
+        "solarized",
+        "ssms",
+        "the-matrix",
+        "tomorrow-night-bright",
+        "tomorrow-night-eighties",
+        "ttcn",
+        "twilight",
+        "vibrant-ink",
+        "xq-dark",
+        "xq-light",
+        "yeti",
+        "zenburn"
     ];
     editormd.prismThemes = [
         "default",
@@ -3945,7 +4014,7 @@
 
     // 自定义Prismjs地址
     editormd.prism = {
-        url: '//cdnjs.cloudflare.com/ajax/libs/prism/1.14.0'
+        url: "//cdnjs.cloudflare.com/ajax/libs/prism/1.14.0"
     };
 
     // 使用国外的CDN，加载速度有时会很慢，或者自定义URL
@@ -4015,51 +4084,51 @@
         var guid = new Date().getTime();
         var dialogName = options.name === "" ? classPrefix + "dialog-" + guid : options.name;
         var mouseOrTouch = editormd.mouseOrTouch;
-        var html = '<div class="' + classPrefix + "dialog " + dialogName + '">';
+        var html = "<div class=\"" + classPrefix + "dialog " + dialogName + "\">";
         if (options.title !== "") {
             html +=
-                '<div class="' +
+                "<div class=\"" +
                 classPrefix +
-                'dialog-header"' +
-                (options.drag ? ' style="cursor: move;"' : "") +
+                "dialog-header\"" +
+                (options.drag ? " style=\"cursor: move;\"" : "") +
                 ">";
             html +=
-                '<strong class="' +
+                "<strong class=\"" +
                 classPrefix +
-                'dialog-title">' +
+                "dialog-title\">" +
                 options.title +
                 "</strong>";
             html += "</div>"
         }
         if (options.closed) {
             html +=
-                '<a href="javascript:;" class="fa fa-close ' +
+                "<a href=\"javascript:;\" class=\"fa fa-close " +
                 classPrefix +
-                'dialog-close"></a>'
+                "dialog-close\"></a>"
         }
         html +=
-            '<div class="' + classPrefix + 'dialog-container">' + options.content;
+            "<div class=\"" + classPrefix + "dialog-container\">" + options.content;
         if (options.footer || typeof options.footer === "string") {
             html +=
-                '<div class="' +
+                "<div class=\"" +
                 classPrefix +
-                'dialog-footer">' +
+                "dialog-footer\">" +
                 (typeof options.footer === "boolean" ? "" : options.footer) +
                 "</div>"
         }
         html += "</div>";
         html +=
-            '<div class="' +
+            "<div class=\"" +
             classPrefix +
             "dialog-mask " +
             classPrefix +
-            'dialog-mask-bg"></div>';
+            "dialog-mask-bg\"></div>";
         html +=
-            '<div class="' +
+            "<div class=\"" +
             classPrefix +
             "dialog-mask " +
             classPrefix +
-            'dialog-mask-con"></div>';
+            "dialog-mask-con\"></div>";
         html += "</div>";
         editor.append(html);
         var dialog = editor.find("." + dialogName);
@@ -4128,11 +4197,11 @@
                 var btn = options.buttons[key]
                 var btnClassName = classPrefix + key + "-btn"
                 footer.append(
-                    '<button class="' +
+                    "<button class=\"" +
                     classPrefix +
                     "btn " +
                     btnClassName +
-                    '">' +
+                    "\">" +
                     btn[0] +
                     "</button>"
                 )
@@ -4245,16 +4314,24 @@
      */
 
     editormd.mouseOrTouch = function (mouseEventType, touchEventType) {
-        mouseEventType = mouseEventType || "click"
-        touchEventType = touchEventType || "touchend"
-        var eventType = mouseEventType
-        try {
-            document.createEvent("TouchEvent")
-            eventType = touchEventType
-        } catch (e) {
+        mouseEventType = mouseEventType || "click";
+        touchEventType = touchEventType || "touchend";
+        var eventType = mouseEventType;
+        var userAgentInfo = navigator.userAgent;
+        var Agents = ["Android", "iPhone", "SymbianOS", "Windows Phone", "iPad", "iPod"];
+        var flag = true;
+        for (var v = 0; v < Agents.length; v++) {
+            if (userAgentInfo.indexOf(Agents[v]) > 0) {
+                flag = false;
+                break;
+            }
         }
+        if (!flag) {
+            eventType = touchEventType;
+        }
+
         return eventType
-    }
+    };
 
     /**
      * 日期时间的格式化方法

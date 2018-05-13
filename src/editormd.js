@@ -472,9 +472,9 @@
             }
             var appendElements = [
                 !settings.readOnly
-                    ? "<a href=\"javascript:;\" class=\"fa fa-close " +
+                    ? "<a href=\"javascript:;\" class=\" " +
                     classPrefix +
-                    "preview-close-btn\"></a>"
+                    "preview-close-btn\"><i class=\"fa fa-close \"></i></a>"
                     : "",
                 settings.saveHTMLToTextarea
                     ? "<textarea class=\"" +
@@ -626,7 +626,7 @@
             }
             if (settings.mind) {
                 if (settings.autoLoadModules) {
-                    editormd.loadScript(loadPath + "mindMap", function () {
+                    editormd.loadScript(loadPath + "mindMap.min", function () {
                         _this.mindRender();
                     });
                 } else {
@@ -1077,11 +1077,11 @@
                 if (!settings.toolbarAutoFixed) {
                     return false
                 }
-                if (top - editor.offset().top > 10 && top < editor.height()) {
+                if (top - editor.offset().top > 10 && top - editor.offset().top < editor.height() - toolbar.height()) {
                     toolbar.css({
                         position: "fixed",
                         width: editor.width() + "px",
-                        left: ($window.width() - editor.width()) / 2 + "px"
+                        left: editor.offset().left + "px"
                     })
                 } else {
                     toolbar.css({
@@ -1541,13 +1541,15 @@
                 if (flowchartTimer === null) {
                     return this
                 }
-                previewContainer.find(".flowchart").flowChart()
+                //previewContainer.find(".flowchart").flowChart()
+                previewContainer.find(".flowchart") && previewContainer.find(".flowchart").length > 0 && previewContainer.find(".flowchart").flowChart();
             }
 
             if (settings.sequenceDiagram) {
-                previewContainer
-                    .find(".sequence-diagram")
-                    .sequenceDiagram({theme: "simple"})
+                //previewContainer.find(".sequence-diagram").sequenceDiagram({theme: "simple"})
+                previewContainer.find(".sequence-diagram") &&
+                previewContainer.find(".sequence-diagram").length > 0 &&
+                previewContainer.find(".sequence-diagram").sequenceDiagram({theme: "simple"});
             }
             var preview = $this.preview
             var codeMirror = $this.codeMirror
@@ -3338,7 +3340,8 @@
                 "-" +
                 this.options.headerPrefix +
                 id +
-                "\">"
+                "\">";
+            //headingHTML += "<a name=\"" + text.replace(/<[^>]*>\s?/g,'') + "\" class=\"reference-link\"></a>";
             headingHTML += "<a name=\"" + text + "\" class=\"reference-link\"></a>"
             headingHTML += "<span class=\"header-link octicon octicon-link\"></span>"
             headingHTML += hasLinkReg

@@ -64,13 +64,11 @@
 - [Twitter Emoji \(Twemoji\)](http://twitter.github.io/twemoji/preview.html "Twitter Emoji \(Twemoji\)")
 - [FontAwesome icons emoji](http://fortawesome.github.io/Font-Awesome/icons/ "FontAwesome icons emoji")
 
-##### 流程图参考 (Flowchart reference)
+##### 绘图参考 (Mermaid reference)
 
-[http://adrai.github.io/flowchart.js/](http://adrai.github.io/flowchart.js/)
-
-##### 时序图参考 (SequenceDiagram reference)
-
-[http://bramp.github.io/js-sequence-diagrams/](http://bramp.github.io/js-sequence-diagrams/)
+[FlowChart 流程图](https://mermaidjs.github.io/flowchart.html)
+[SequenceDiagram 序列图](https://mermaidjs.github.io/sequenceDiagram.html)
+[GanttDiagrams 甘特图](https://mermaidjs.github.io/gantt.html)
 
 ##### TeX/LaTeX reference
 

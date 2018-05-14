@@ -43,8 +43,8 @@
     };
 
     editormd.title = editormd.$name = "Editor.md";
-    editormd.version = "2.0.1";
-    editormd.homePage = "https://pandao.github.io/editor.md/";
+    editormd.version = "2.0.2";
+    editormd.homePage = "https://github.com/JaxsonWang/editormd/";
     editormd.classPrefix = "editormd-";
 
     editormd.toolbarModes = {
@@ -211,12 +211,11 @@
         // Support FontAwesome icon emoji :fa-xxx: > Using fontAwesome icon web fonts;
         // Support Editor.md logo icon emoji :editormd-logo: :editormd-logo-1x: > 1~8x;
         tex: false, // TeX(LaTeX), based on KaTeX
-        flowChart: false, // flowChart.js only support IE9+
-        sequenceDiagram: false, // sequenceDiagram.js only support IE9+
         previewCodeHighlight: true,
         prismTheme: "default", // Prism Theme Style
         prismLineNumbers: false,
-        mind: false,
+        mind: false, //MindMap
+        mermaid: false, //mermaid
         toolbar: true, // show/hide toolbar
         toolbarAutoFixed: true, // on window scroll auto fixed position
         toolbarIcons: "full",
@@ -384,7 +383,7 @@
     editormd.$CodeMirror = null;
     editormd.$prettyPrint = null;
 
-    var timer, flowchartTimer, mindTimer;
+    var timer, mindTimer, mermaidTimer;
 
     editormd.prototype = editormd.fn = {
         state: {
@@ -570,51 +569,28 @@
             var _this = this
             var settings = this.settings
             var loadPath = settings.path
-            var loadFlowChartOrSequenceDiagram = function () {
+            var loadMermaid = function () {
                 if (editormd.isIE8) {
                     _this.loadedDisplay()
                     return
                 }
-                if (settings.flowChart || settings.sequenceDiagram) {
-                    editormd.loadScript(loadPath + "raphael.min", function () {
-                        editormd.loadScript(loadPath + "underscore-min", function () {
-                            if (!settings.flowChart && settings.sequenceDiagram) {
-                                editormd.loadScript(
-                                    loadPath + "sequence-diagram.min",
-                                    function () {
-                                        _this.loadedDisplay()
-                                    }
-                                )
-                            } else if (settings.flowChart && !settings.sequenceDiagram) {
-                                editormd.loadScript(loadPath + "flowchart.min", function () {
-                                    editormd.loadScript(
-                                        loadPath + "jquery.flowchart.min",
-                                        function () {
-                                            _this.loadedDisplay()
-                                        }
-                                    )
-                                })
-                            } else if (settings.flowChart && settings.sequenceDiagram) {
-                                editormd.loadScript(loadPath + "flowchart.min", function () {
-                                    editormd.loadScript(
-                                        loadPath + "jquery.flowchart.min",
-                                        function () {
-                                            editormd.loadScript(
-                                                loadPath + "sequence-diagram.min",
-                                                function () {
-                                                    _this.loadedDisplay()
-                                                }
-                                            )
-                                        }
-                                    )
-                                })
-                            }
-                        })
-                    })
+
+                if (settings.mind) {
+                    editormd.loadScript(loadPath + "mindMap.min",function () {
+                        _this.loadedDisplay();
+                    });
                 } else {
-                    _this.loadedDisplay()
+                    _this.loadedDisplay();
                 }
-            }
+
+                if (settings.mermaid) {
+                    editormd.loadScript(loadPath + "mermaid.min",function () {
+                        _this.loadedDisplay();
+                    });
+                } else {
+                    _this.loadedDisplay();
+                }
+            };
 
             editormd.loadCSS(loadPath + "codemirror/lib/codemirror");
             if (settings.searchReplace && !settings.readOnly) {
@@ -624,22 +600,13 @@
             if (settings.codeFold) {
                 editormd.loadCSS(loadPath + "codemirror/addon/fold/foldgutter")
             }
-            if (settings.mind) {
-                if (settings.autoLoadModules) {
-                    editormd.loadScript(loadPath + "mindMap.min", function () {
-                        _this.mindRender();
-                    });
-                } else {
-                    this.mindRender();
-                }
-            }
             editormd.loadScript(loadPath + "codemirror/lib/codemirror", function () {
-                editormd.$CodeMirror = CodeMirror
+                editormd.$CodeMirror = CodeMirror;
                 editormd.loadScript(loadPath + "codemirror/modes.min", function () {
                     editormd.loadScript(loadPath + "codemirror/addons.min", function () {
-                        _this.setCodeMirror()
+                        _this.setCodeMirror();
                         if (settings.mode !== "gfm" && settings.mode !== "markdown") {
-                            _this.loadedDisplay()
+                            _this.loadedDisplay();
                             return false
                         }
                         _this.setToolbar()
@@ -648,10 +615,10 @@
 
                             if (settings.previewCodeHighlight) {
                                 editormd.loadScript(loadPath + "prism.min", function () {
-                                    loadFlowChartOrSequenceDiagram()
+                                    loadMermaid()
                                 })
                             } else {
-                                loadFlowChartOrSequenceDiagram()
+                                loadMermaid()
                             }
                         })
                     })
@@ -1312,28 +1279,29 @@
             var editor = this.editor
             var classPrefix = this.classPrefix
             var infoDialogHTML = [
-                "<div class=\"" +
+                "<div class='" +
                 classPrefix +
                 "dialog " +
                 classPrefix +
-                "dialog-info\" style=\"\">",
-                "<div class=\"" + classPrefix + "dialog-container\">",
-                "<h1><i class=\"editormd-logo editormd-logo-lg editormd-logo-color\"></i> " +
+                "dialog-info'>",
+                "<div class='" + classPrefix + "dialog-container'>",
+                "<h1>" +
                 editormd.title +
                 "<small>v" +
                 editormd.version +
                 "</small></h1>",
                 "<p>" + this.lang.description + "</p>",
-                "<p style=\"margin: 10px 0 20px 0;\"><a href=\"" +
+                "<p style='margin: 10px 0 20px 0;'><a href='" +
                 editormd.homePage +
-                "\" target=\"_blank\">" +
+                "' target='_blank'>" +
                 editormd.homePage +
-                " <i class=\"fa fa-external-link\"></i></a></p>",
-                "<p style=\"font-size: 0.85em;\">Copyright &copy; 2015 <a href=\"https://github.com/pandao\" target=\"_blank\" class=\"hover-link\">Pandao</a>, The <a href=\"https://github.com/pandao/editor.md/blob/master/LICENSE\" target=\"_blank\" class=\"hover-link\">MIT</a> License.</p>",
+                " <i class='fa fa-external-link'></i></a></p>",
+                "<p style='font-size: 0.85em;'>Base The Old <a href='https://pandao.github.io/editor.md/' rel='nofollow' target='_blank' class='hover-link'>Editor.md</a></p>" +
+                "<p style='font-size: 0.85em;'>Copyright &copy; 2018 <a href='https://github.com/JaxsonWang' target='_blank' class='hover-link'>JaxsonWang</a>, The <a href='https://github.com/JaxsonWang/Editormd/blob/master/LICENSE' target='_blank' class='hover-link'>GNU V3</a> License.</p>",
                 "</div>",
-                "<a href=\"javascript:;\" class=\"fa fa-close " +
+                "<a href='javascript:;' class='fa fa-close " +
                 classPrefix +
-                "dialog-close\"></a>",
+                "dialog-close'></a>",
                 "</div>"
             ].join("\n")
             editor.append(infoDialogHTML)
@@ -1524,45 +1492,41 @@
         },
 
         /**
-         * 解析和渲染流程图及时序图
-         * FlowChart and SequenceDiagram Renderer
+         * 解析和渲染Mermaid
+         * mermaid Render
          *
          * @returns {editormd}             返回editormd的实例对象
          */
+        mermaidRender: function () {
+            if (mermaidTimer === null) {
+                return this;
+            }
+            this.previewContainer.find(".mermaid").each(function () {
+                var config = {
+                    startOnLoad:true,
+                    // flowchart:{
+                    //     useMaxWidth:false,
+                    //     htmlLabels:false
+                    // }
+                };
+                mermaid.init(config,'.mermaid');
+                //mermaid.initialize(config);
+            });
 
-        flowChartAndSequenceDiagramRender: function () {
-            var $this = this
-            var settings = this.settings
-            var previewContainer = this.previewContainer
-            if (editormd.isIE8) {
-                return this
-            }
-            if (settings.flowChart) {
-                if (flowchartTimer === null) {
-                    return this
-                }
-                //previewContainer.find(".flowchart").flowChart()
-                previewContainer.find(".flowchart") && previewContainer.find(".flowchart").length > 0 && previewContainer.find(".flowchart").flowChart();
-            }
-
-            if (settings.sequenceDiagram) {
-                //previewContainer.find(".sequence-diagram").sequenceDiagram({theme: "simple"})
-                previewContainer.find(".sequence-diagram") &&
-                previewContainer.find(".sequence-diagram").length > 0 &&
-                previewContainer.find(".sequence-diagram").sequenceDiagram({theme: "simple"});
-            }
-            var preview = $this.preview
-            var codeMirror = $this.codeMirror
-            var codeView = codeMirror.find(".CodeMirror-scroll")
-            var height = codeView.height()
-            var scrollTop = codeView.scrollTop()
-            var percent = scrollTop / codeView[0].scrollHeight
-            var tocHeight = 0
+            var $this = this;
+            var settings = this.settings;
+            var preview = $this.preview;
+            var codeMirror = $this.codeMirror;
+            var codeView = codeMirror.find(".CodeMirror-scroll");
+            var height = codeView.height();
+            var scrollTop = codeView.scrollTop();
+            var percent = scrollTop / codeView[0].scrollHeight;
+            var tocHeight = 0;
             preview.find(".markdown-toc-list").each(function () {
                 tocHeight += $(this).height()
-            })
-            var tocMenuHeight = preview.find(".editormd-toc-menu").height()
-            tocMenuHeight = !tocMenuHeight ? 0 : tocMenuHeight
+            });
+            var tocMenuHeight = preview.find(".editormd-toc-menu").height();
+            tocMenuHeight = !tocMenuHeight ? 0 : tocMenuHeight;
             if (settings.syncScrolling) {
                 if (scrollTop === 0) {
                     preview.scrollTop(0)
@@ -1574,7 +1538,8 @@
                     )
                 }
             }
-            return this
+
+            return this;
         },
 
         /**
@@ -1926,8 +1891,6 @@
                 tex: settings.tex,
                 atLink: settings.atLink, // for @link
                 emailLink: settings.emailLink, // for mail address auto link
-                flowChart: settings.flowChart,
-                sequenceDiagram: settings.sequenceDiagram,
                 previewCodeHighlight: settings.previewCodeHighlight
             })
             var markedOptions = (this.markedOptions = {
@@ -1967,7 +1930,6 @@
             if (settings.watch || (!settings.watch && state.preview)) {
                 previewContainer.html(newMarkdownDoc);
                 this.previewCodeHighlight();
-                this.mindRender();
                 if (settings.toc) {
                     var tocContainer =
                         settings.tocContainer === ""
@@ -2013,12 +1975,21 @@
                         this.katexRender()
                     }
                 }
-                if (settings.flowChart || settings.sequenceDiagram) {
-                    flowchartTimer = setTimeout(function () {
-                        clearTimeout(flowchartTimer)
-                        _this.flowChartAndSequenceDiagramRender()
-                        flowchartTimer = null
-                    }, 10)
+                if(settings.mind) {
+                    mindTimer = setTimeout(function () {
+                        clearTimeout(mindTimer);
+                        _this.mindRender();
+                        mindTimer = null;
+                    }, 10);
+                    //this.mindRender();
+                }
+                if(settings.mermaid) {
+                    mermaidTimer = setTimeout(function () {
+                        clearTimeout(mermaidTimer);
+                        _this.mermaidRender();
+                        mermaidTimer = null;
+                    }, 1000);
+                    //this.mermaidRender();
                 }
 
                 if (state.loaded) {
@@ -3148,8 +3119,6 @@
             taskList: false, // Enable Github Flavored Markdown task lists
             emoji: false, // :emoji: , Support Twemoji, fontAwesome, Editor.md logo emojis.
             tex: false, // TeX(LaTeX), based on KaTeX
-            flowChart: false, // flowChart.js only support IE9+
-            sequenceDiagram: false // sequenceDiagram.js only support IE9+
         }
         var settings = $.extend(defaults, options || {})
         var marked = editormd.$marked
@@ -3395,12 +3364,8 @@
                     "</p>\n"
         }
         markedRenderer.code = function (code, lang, escaped) {
-            if (lang === "seq" || lang === "sequence") {
-                return "<div class=\"sequence-diagram\">" + code + "</div>"
-            } else if (lang === "flow") {
-                return "<div class=\"flowchart\">" + code + "</div>"
-            } else if (lang === "tlog") {
-                return "<div class=\"tlog\">" + code + "</div>";
+            if (lang === "mermaid") {
+                return "<div class='mermaid'>" + code + "</div>";
             } else if (lang === "mind") {
                 // console.log("mind\n", parseList(code));
                 //console.log(code);
@@ -3694,9 +3659,8 @@
             tex: false,
             taskList: false, // Github Flavored Markdown task lists
             emoji: false,
-            flowChart: false,
             mind: false,
-            sequenceDiagram: false,
+            mermaid: false,
             previewCodeHighlight: true
         }
 
@@ -3722,8 +3686,6 @@
             pageBreak: settings.pageBreak,
             atLink: settings.atLink, // for @link
             emailLink: settings.emailLink, // for mail address auto link
-            flowChart: settings.flowChart,
-            sequenceDiagram: settings.sequenceDiagram,
             previewCodeHighlight: settings.previewCodeHighlight
         }
         var markedOptions = {
@@ -3789,16 +3751,8 @@
             Prism.highlightAll();
         }
         if (settings.prismLineNumbers) {
-            previewContainer.find("pre").addClass("line-numbers");
+            div.find("pre").addClass("line-numbers");
             Prism.highlightAll();
-        }
-        if (!editormd.isIE8) {
-            if (settings.flowChart) {
-                div.find(".flowchart").flowChart()
-            }
-            if (settings.sequenceDiagram) {
-                div.find(".sequence-diagram").sequenceDiagram({theme: "simple"})
-            }
         }
         if (settings.tex) {
             var katexHandle = function () {
@@ -3828,6 +3782,18 @@
             div.find(".mind").each(function() {
                 var mind = $(this);
                 mind.drawMind();
+            });
+        }
+        if (settings.mermaid) {
+            div.find(".mermaid").each(function() {
+                var config = {
+                    startOnLoad:true,
+                    // flowchart:{
+                    //     useMaxWidth:false,
+                    //     htmlLabels:false
+                    // }
+                };
+                mermaid.init(config,'.mermaid');
             });
         }
         div.getMarkdown = function () {

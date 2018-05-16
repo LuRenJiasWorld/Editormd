@@ -1484,9 +1484,9 @@
             this.previewContainer.find(".mind").each(function () {
                 var mind = $(this);
                 mind.drawMind();
+                //console.log(mind)
             });
-
-            //$('.mind').drawMind();
+            $(".mind").drawMind();
 
             return this;
         },
@@ -3369,7 +3369,7 @@
             } else if (lang === "mind") {
                 // console.log("mind\n", parseList(code));
                 //console.log(code);
-                return "<div class=\"mind\" style=\"width: 100%;overflow-x: auto;\"><canvas id=\"canvas\"></canvas><div class=\"mindTxt\">" + code + "</div></div>";
+                return "<div class=\"mind\" style=\"width: 100%;overflow-x: auto;\"><canvas></canvas><div class=\"mindTxt\">" + code + "</div></div>";
             } else if (lang === "math" || lang === "latex" || lang === "katex") {
                 return "<p class=\"" + editormd.classNames.block_tex + "\">" + code + "</p>"
             } else {
@@ -3782,7 +3782,9 @@
             div.find(".mind").each(function() {
                 var mind = $(this);
                 mind.drawMind();
+                //console.log(mind)
             });
+            $(".mind").drawMind();
         }
         if (settings.mermaid) {
             div.find(".mermaid").each(function() {

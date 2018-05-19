@@ -1,6 +1,5 @@
 (function (factory) {
     "use strict";
-
     // CommonJS/Node.js
     if (
         typeof require === "function" &&
@@ -29,7 +28,6 @@
     if (typeof $ === "undefined") {
         return
     }
-
     /**
      * editormd
      *
@@ -380,6 +378,7 @@
     editormd.dialogZindex = 99999;
     editormd.$katex = null;
     editormd.$marked = null;
+    editormd.$mermaid = null;
     editormd.$CodeMirror = null;
     editormd.$prettyPrint = null;
 
@@ -516,15 +515,15 @@
             }
             if (settings.prismTheme !== "") {
                 if (settings.prismTheme === "default") {
-                    editormd.loadCSS(editormd.prism.url + "/themes/prism.min");
+                    editormd.loadCSS(editormd.prismURL.url + "/themes/prism.min");
                 } else {
-                    editormd.loadCSS(editormd.prism.url + "/themes/prism-" + settings.prismTheme + ".min");
+                    editormd.loadCSS(editormd.prismURL.url + "/themes/prism-" + settings.prismTheme + ".min");
                 }
             }
 
             if (settings.prismLineNumbers) {
-                editormd.loadCSS(editormd.prism.url + "/plugins/line-numbers/prism-line-numbers.min");
-                editormd.loadScript(editormd.prism.url + "/plugins/line-numbers/prism-line-numbers.min");
+                editormd.loadCSS(editormd.prismURL.url + "/plugins/line-numbers/prism-line-numbers.min");
+                editormd.loadScript(editormd.prismURL.url + "/plugins/line-numbers/prism-line-numbers.min");
             }
 
             if (typeof define === "function" && define.amd) {
@@ -574,17 +573,8 @@
                     _this.loadedDisplay()
                     return
                 }
-
                 if (settings.mind) {
-                    editormd.loadScript(loadPath + "mindMap.min",function () {
-                        _this.loadedDisplay();
-                    });
-                } else {
-                    _this.loadedDisplay();
-                }
-
-                if (settings.mermaid) {
-                    editormd.loadScript(loadPath + "mermaid.min",function () {
+                    editormd.loadScript(loadPath + "mindMap.min", function () {
                         _this.loadedDisplay();
                     });
                 } else {
@@ -1442,7 +1432,10 @@
             if (settings.prismLineNumbers) {
                 previewContainer.find("pre").addClass("line-numbers");
             }
-            return Prism.highlightAll();
+
+            Prism.highlightAll();
+
+            return this;
         },
 
         /**
@@ -1503,13 +1496,13 @@
             }
             this.previewContainer.find(".mermaid").each(function () {
                 var config = {
-                    startOnLoad:true,
+                    startOnLoad: true,
                     // flowchart:{
                     //     useMaxWidth:false,
                     //     htmlLabels:false
                     // }
                 };
-                mermaid.init(config,'.mermaid');
+                mermaid.init(config, ".mermaid");
                 //mermaid.initialize(config);
             });
 
@@ -1549,7 +1542,6 @@
          * @param   {Object}    keyMap      KeyMap key/value {"(Ctrl/Shift/Alt)-Key" : function(){}}
          * @returns {editormd}              return this
          */
-
         registerKeyMaps: function (keyMap) {
             var _this = this
             var cm = this.cm
@@ -1611,7 +1603,6 @@
          * 绑定同步滚动
          * @returns {editormd} return this
          */
-
         bindScrollEvent: function () {
             var _this = this
             var preview = this.preview
@@ -1721,7 +1712,6 @@
          * @param   {Boolean}   recreate   是否为重建编辑器
          * @returns {editormd}             返回editormd的实例对象
          */
-
         loadedDisplay: function (recreate) {
             recreate = recreate || false
             var _this = this
@@ -1754,7 +1744,6 @@
          * @param   {Number|String} width  编辑器宽度值
          * @returns {editormd}             返回editormd的实例对象
          */
-
         width: function (width) {
             this.editor.css("width", typeof width === "number" ? width + "px" : width)
             this.resize()
@@ -1768,7 +1757,6 @@
          * @param   {Number|String} height  编辑器高度值
          * @returns {editormd}              返回editormd的实例对象
          */
-
         height: function (height) {
             this.editor.css(
                 "height",
@@ -1786,7 +1774,6 @@
          * @param   {Number|String} [height=null] 编辑器高度值
          * @returns {editormd}                    返回editormd的实例对象
          */
-
         resize: function (width, height) {
             width = width || null
             height = height || null
@@ -1864,7 +1851,6 @@
          *
          * @returns {editormd}     返回editormd的实例对象
          */
-
         save: function () {
             if (timer === null) {
                 return this
@@ -1975,7 +1961,7 @@
                         this.katexRender()
                     }
                 }
-                if(settings.mind) {
+                if (settings.mind) {
                     mindTimer = setTimeout(function () {
                         clearTimeout(mindTimer);
                         _this.mindRender();
@@ -1983,13 +1969,18 @@
                     }, 10);
                     //this.mindRender();
                 }
-                if(settings.mermaid) {
-                    mermaidTimer = setTimeout(function () {
-                        clearTimeout(mermaidTimer);
-                        _this.mermaidRender();
-                        mermaidTimer = null;
-                    }, 1000);
-                    //this.mermaidRender();
+                if (settings.mermaid) {
+                    if (!editormd.mermaidLoaded && settings.autoLoadModules) {
+                        editormd.loadMermaid(function () {
+                            editormd.$mermaid = mermaid;
+                            editormd.mermaidLoaded = true;
+                            _this.mermaidRender();
+                        })
+                    } else {
+                        editormd.$mermaid = mermaid;
+                        this.mermaidRender();
+                    }
+
                 }
 
                 if (state.loaded) {
@@ -2005,7 +1996,6 @@
          *
          * @returns {editormd}         返回editormd的实例对象
          */
-
         focus: function () {
             this.cm.focus()
             return this
@@ -2018,7 +2008,6 @@
          * @param   {Object}    cursor 要设置的光标位置键值对象，例：{line:1, ch:0}
          * @returns {editormd}         返回editormd的实例对象
          */
-
         setCursor: function (cursor) {
             this.cm.setCursor(cursor)
             return this
@@ -2030,7 +2019,6 @@
          *
          * @returns {Cursor}         返回一个光标Cursor对象
          */
-
         getCursor: function () {
             return this.cm.getCursor()
         },
@@ -2043,7 +2031,6 @@
          * @param   {Object}    to     结束位置的光标键值对象，例：{line:1, ch:0}
          * @returns {editormd}         返回editormd的实例对象
          */
-
         setSelection: function (from, to) {
             this.cm.setSelection(from, to)
             return this
@@ -2055,7 +2042,6 @@
          *
          * @returns {String}         返回选中文本的字符串形式
          */
-
         getSelection: function () {
             return this.cm.getSelection()
         },
@@ -2067,7 +2053,6 @@
          * @param   {Array}    ranges  cursor selection ranges array
          * @returns {Array}            return this
          */
-
         setSelections: function (ranges) {
             this.cm.setSelections(ranges)
             return this
@@ -2079,7 +2064,6 @@
          *
          * @returns {Array}         return selection ranges array
          */
-
         getSelections: function () {
             return this.cm.getSelections()
         },
@@ -2091,7 +2075,6 @@
          * @param   {String}    value  要插入的字符值
          * @returns {editormd}         返回editormd的实例对象
          */
-
         replaceSelection: function (value) {
             this.cm.replaceSelection(value)
             return this
@@ -2107,7 +2090,6 @@
          * @param   {String}    value  要插入的字符值
          * @returns {editormd}         返回editormd的实例对象
          */
-
         insertValue: function (value) {
             this.replaceSelection(value)
             return this
@@ -2120,7 +2102,6 @@
          * @param   {String}    md     要追加的markdown源文档
          * @returns {editormd}         返回editormd的实例对象
          */
-
         appendMarkdown: function (md) {
             var settings = this.settings
             var cm = this.cm
@@ -2135,7 +2116,6 @@
          * @param   {String}    md     要传入的markdown源文档
          * @returns {editormd}         返回editormd的实例对象
          */
-
         setMarkdown: function (md) {
             this.cm.setValue(md || this.settings.markdown)
             return this
@@ -2147,7 +2127,6 @@
          *
          * @returns {editormd}         返回editormd的实例对象
          */
-
         getMarkdown: function () {
             return this.cm.getValue()
         },
@@ -2158,7 +2137,6 @@
          *
          * @returns {editormd}         返回editormd的实例对象
          */
-
         getValue: function () {
             return this.cm.getValue()
         },
@@ -2170,7 +2148,6 @@
          * @param   {String}     value   set code/value/string/text
          * @returns {editormd}           返回editormd的实例对象
          */
-
         setValue: function (value) {
             this.cm.setValue(value)
             return this
@@ -2182,7 +2159,6 @@
          *
          * @returns {editormd}         返回editormd的实例对象
          */
-
         clear: function () {
             this.cm.setValue("")
             return this
@@ -2194,7 +2170,6 @@
          *
          * @returns {String}               返回HTML源码
          */
-
         getHTML: function () {
             if (!this.settings.saveHTMLToTextarea) {
                 alert("Error: settings.saveHTMLToTextarea == false")
@@ -2587,7 +2562,6 @@
      *
      * @returns {void}
      */
-
     editormd.dialogLockScreen = function () {
         var settings = this.settings || {dialogLockScreen: true}
         if (settings.dialogLockScreen) {
@@ -2603,7 +2577,6 @@
      * @param   {Object}     dialog    dialog jQuery object
      * @returns {void}
      */
-
     editormd.dialogShowMask = function (dialog) {
         var editor = this.editor
         var settings = this.settings || {dialogShowMask: true}
@@ -3041,7 +3014,7 @@
             : str.trim()
     }
 
-    editormd.trim = trim
+    editormd.trim = trim;
 
     /**
      * 所有单词首字母大写
@@ -3091,13 +3064,13 @@
     }
     // Emoji graphics files url path
     editormd.emoji = {
-        path: "//cdnjs.cloudflare.com/ajax/libs/emojify.js/1.1.0/images/basic/",
+        path: "//cdn.jsdelivr.net/npm/emojify.js@1.1.0/dist/images/basic/",
         ext: ".png"
     };
     // Twitter Emoji (Twemoji)  graphics files url path
     editormd.twemoji = {
-        path: "//cdnjs.cloudflare.com/ajax/libs/twemoji/2.6.0/36x36/",
-        ext: ".png"
+        path: "//cdn.jsdelivr.net/npm/twemoji@2.5.0/2/svg/",
+        ext: ".svg"
     };
 
     /**
@@ -3107,7 +3080,6 @@
      * @param   {Array}    markdownToC     传入用于接收TOC的数组
      * @returns {Renderer} markedRenderer  返回marked的Renderer自定义对象
      */
-
     editormd.markedRenderer = function (markdownToC, options) {
         var defaults = {
             toc: true, // Table of contents
@@ -3416,13 +3388,7 @@
      * @param   {Integer}  startLevel      Hx 起始层级
      * @returns {Object}   tocContainer    返回ToC列表容器层的jQuery对象元素
      */
-
-    editormd.markdownToCRenderer = function (
-        toc,
-        container,
-        tocDropdown,
-        startLevel
-    ) {
+    editormd.markdownToCRenderer = function (toc, container, tocDropdown, startLevel) {
         var html = ""
         var lastLevelArr = [0]
         // var lastLevel = 0
@@ -3499,7 +3465,6 @@
      * @param   {String}   tocTitle        ToC title
      * @returns {Object}                   return toc-menu object
      */
-
     editormd.tocDropdownMenu = function (container, tocTitle) {
         tocTitle = tocTitle || "Table of Contents"
         var zindex = 400
@@ -3560,7 +3525,6 @@
      * @param   {String}   filters       要过滤的标签
      * @returns {String}   html          返回过滤的HTML
      */
-
     editormd.filterHTMLTags = function (html, filters) {
         if (typeof html !== "string") {
             html = new String(html)
@@ -3639,7 +3603,6 @@
      * @param   {Object}   [options={}]  配置选项，可选
      * @returns {Object}   div           返回jQuery对象元素
      */
-
     editormd.markdownToHTML = function (id, options) {
         var defaults = {
             gfm: true,
@@ -3653,6 +3616,7 @@
             markdownSourceCode: false,
             htmlDecode: false,
             autoLoadKaTeX: true,
+            autoLoadMermaid: true,
             pageBreak: true,
             atLink: true, // for @link
             emailLink: true, // for mail address auto link
@@ -3748,11 +3712,9 @@
         }
         if (settings.previewCodeHighlight) {
             div.find("pre").addClass("prism-highlight");
-            Prism.highlightAll();
         }
         if (settings.prismLineNumbers) {
             div.find("pre").addClass("line-numbers");
-            Prism.highlightAll();
         }
         if (settings.tex) {
             var katexHandle = function () {
@@ -3779,7 +3741,7 @@
             }
         }
         if (settings.mind) {
-            div.find(".mind").each(function() {
+            div.find(".mind").each(function () {
                 var mind = $(this);
                 mind.drawMind();
                 //console.log(mind)
@@ -3787,16 +3749,23 @@
             $(".mind").drawMind();
         }
         if (settings.mermaid) {
-            div.find(".mermaid").each(function() {
-                var config = {
-                    startOnLoad:true,
-                    // flowchart:{
-                    //     useMaxWidth:false,
-                    //     htmlLabels:false
-                    // }
-                };
-                mermaid.init(config,'.mermaid');
-            });
+            if (settings.autoLoadMermaid && !editormd.$mermaid && !editormd.mermaidLoaded) {
+                this.loadMermaid(function () {
+                    editormd.$mermaid = mermaid;
+                    editormd.mermaidLoaded = true;
+                    div.find(".mermaid").each(function () {
+                        var config = {
+                            startOnLoad: true,
+                            // flowchart:{
+                            //     useMaxWidth:false,
+                            //     htmlLabels:false
+                            // }
+                        };
+                        mermaid.init(config, ".mermaid");
+                    });
+
+                })
+            }
         }
         div.getMarkdown = function () {
             return saveTo.val()
@@ -3893,7 +3862,6 @@
      * @param {Function} [callback=function()] 加载成功后执行的回调函数
      * @param {String}   [into="head"]         嵌入页面的位置
      */
-
     editormd.loadPlugin = function (fileName, callback, into) {
         callback = callback || function () {
         }
@@ -3984,17 +3952,18 @@
     };
 
     // 自定义Prismjs地址
-    editormd.prism = {
-        url: "//cdnjs.cloudflare.com/ajax/libs/prism/1.14.0"
+    editormd.prismURL = {
+        url: "//cdn.jsdelivr.net/npm/prismjs@1.14.0"
     };
 
     // 使用国外的CDN，加载速度有时会很慢，或者自定义URL
     // You can custom KaTeX load url.
     editormd.katexURL = {
-        css: "//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.9.0/katex.min",
-        js: "//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.9.0/katex.min"
+        css: "//cdn.jsdelivr.net/npm/katex@0.9.0/dist/katex.min",
+        js: "//cdn.jsdelivr.net/npm/katex@0.9.0/dist/katex.min"
     };
     editormd.kaTeXLoaded = false;
+
     /**
      * 加载KaTeX文件
      * load KaTeX files
@@ -4008,6 +3977,23 @@
         })
     };
 
+    //===========
+    editormd.mermaidURL = {
+        js: "//cdn.jsdelivr.net/npm/mermaid@8.0.0-rc.8/dist/mermaid.min"
+    };
+    editormd.mermaidLoaded = false;
+
+    /**
+     * 加载Mermaid文件
+     *
+     * @param {Function} [callback=function()]  加载成功后执行的回调函数
+     */
+    editormd.loadMermaid = function (callback) {
+        editormd.loadScript(editormd.mermaidURL.js, callback || function () {
+
+        });
+    };
+
     /**
      * 锁屏
      * lock screen
@@ -4015,7 +4001,6 @@
      * @param   {Boolean}   lock   Boolean 布尔值，是否锁屏
      * @returns {void}
      */
-
     editormd.lockScreen = function (lock) {
         $("html,body").css("overflow", lock ? "hidden" : "")
     };
@@ -4027,7 +4012,6 @@
      * @param   {Object} options 配置项键值对 Key/Value
      * @returns {dialog} 返回创建的dialog的jQuery实例对象
      */
-
     editormd.createDialog = function (options) {
         var defaults = {
             name: "",
@@ -4273,7 +4257,7 @@
         }
         editormd.dialogZindex += 2
         return dialog
-    }
+    };
 
     /**
      * 鼠标和触摸事件的判断/选择方法
@@ -4283,7 +4267,6 @@
      * @param   {String} [touchEventType="touchend"] 供选择的触摸事件
      * @returns {String} EventType                   返回事件类型名称
      */
-
     editormd.mouseOrTouch = function (mouseEventType, touchEventType) {
         mouseEventType = mouseEventType || "click";
         touchEventType = touchEventType || "touchend";
@@ -4311,7 +4294,6 @@
      * @param   {String}   [format=""]  日期时间的格式，类似PHP的格式
      * @returns {String}   datefmt      返回格式化后的日期时间字符串
      */
-
     editormd.dateFormat = function (format) {
         format = format || ""
         var addZero = function (d) {
@@ -4405,5 +4387,6 @@
         }
         return datefmt
     }
+
     return editormd
-})
+});

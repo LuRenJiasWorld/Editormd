@@ -12,10 +12,10 @@
             <textarea id="test" style="display:none;">###Hello world!</textarea>
         </div>
         <script src="../examples/js/jquery.min.js"></script>
-        <link rel="stylesheet" href="../lib/codemirror/codemirror.min.css" />
-        <script src="../lib/codemirror/codemirror.min.js"></script>
-        <script src="../lib/codemirror/modes.min.js"></script>  
-        <script src="../lib/codemirror/addons.min.js"></script> 
+        <link rel="stylesheet" href="../lib/codemirror/lib/codemirror.css" />
+        <script src="../lib/codemirror/lib/codemirror.js"></script>
+        <script src="../lib/codemirror/modes.min.js"></script>
+        <script src="../lib/codemirror/addons.min.js"></script>
         <script src="js/searchbox.js"></script>
         <style>
             html, body, #layout, .CodeMirror {
@@ -29,34 +29,34 @@
                 font-family:"微软雅黑",Arial;
                 padding-bottom: 4px;
             }
-            
+
             .ace_replacebtn, .ace_button {
                 padding: 0 5px;
                 font-size: 12px;
             }
-            
+
             .ace_button {
                 border-radius: 3px;
                 padding: 2px 5px;
                 margin-left: 3px;
             }
-            
+
             .ace_button.checked {
                 border-color: #ccc;
                 background-color: #fafafa;
-                
+
             }
-            
+
             .ace_search {
                 display: inline-block;
                 max-width: 320px;
             }
-            
+
             .ace_search_form, .ace_replace_form {
                 display: inline-block;
                 float: none;
             }
-            
+
             .ace_search_options {
                 display: block;
             }
@@ -82,22 +82,22 @@
                     showTrailingSpace: true,
                     highlightSelectionMatches: {
                         showToken: /\w/
-                    } 
-                }; 
+                    }
+                };
 
                 $.get("../examples/test.md", function(md){
                     $("#test").html(md);
-                    
+
                     var codeMirrorEditor = CodeMirror.fromTextArea($("#test")[0], codeMirrorConfig);
                     var codeMirror = $(".CodeMirror");
-                
+
                     $(window).keydown(function() {
                         if (!enableSearchbox) return false;
-                        
+
                         $(".ace_replacebtn").eq(0).html("替换");
-                        $(".ace_replacebtn").eq(1).html("全部替换");                        
+                        $(".ace_replacebtn").eq(1).html("全部替换");
                         $(".ace_searchbtn").eq(2).remove();//.html("全部").css({width: "36px", padding :"0 4px"});
-                        
+
                         $(".ace_button").eq(0).html("正则搜索");
                         $(".ace_button").eq(1).html("区分大小写");
                         $(".ace_button").eq(2).html("全词搜索");

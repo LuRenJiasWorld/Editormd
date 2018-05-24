@@ -3007,7 +3007,6 @@
      * @param   {String}    str            string
      * @returns {String}                   trimed string
      */
-
     var trim = function (str) {
         return !String.prototype.trim
             ? str.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, "")
@@ -3023,7 +3022,6 @@
      * @param   {String}    str            string
      * @returns {String}                   string
      */
-
     var ucwords = function (str) {
         return str.toLowerCase().replace(/\b(\w)|\s(\w)/g, function ($1) {
             return $1.toUpperCase()
@@ -3039,7 +3037,6 @@
      * @param   {String}    str            string
      * @returns {String}                   string
      */
-
     var firstUpperCase = function (str) {
         return str.toLowerCase().replace(/\b(\w)/, function ($1) {
             return $1.toUpperCase()
@@ -3050,7 +3047,7 @@
     editormd.firstUpperCase = editormd.ucfirst = firstUpperCase
     editormd.urls = {
         atLinkBase: "https://github.com/"
-    }
+    };
     editormd.regexs = {
         atLink: /@(\w+)/g,
         email: /(\w+)@(\w+)\.(\w+)\.?(\w+)?/g,
@@ -3060,8 +3057,10 @@
         twemoji: /:(tw-([\w]+)-?(\w+)?):/g,
         fontAwesome: /:(fa-([\w]+)(-(\w+)){0,}):/g,
         editormdLogo: /:(editormd-logo-?(\w+)?):/g,
+        //pageBreak: /^<!--more-->/
         pageBreak: /^\[[=]{8,}\]$/
-    }
+
+    };
     // Emoji graphics files url path
     editormd.emoji = {
         path: "//cdn.jsdelivr.net/npm/emojify.js@1.1.0/dist/images/basic/",
@@ -3069,8 +3068,10 @@
     };
     // Twitter Emoji (Twemoji)  graphics files url path
     editormd.twemoji = {
-        path: "//cdn.jsdelivr.net/npm/twemoji@2.5.0/2/svg/",
-        ext: ".svg"
+        // path: "//cdn.jsdelivr.net/npm/twemoji@2.5.0/2/svg/",////cdn.bootcss.com/twemoji/2.5.1/2/svg/
+        // ext: ".svg"
+        path: "//cdnjs.cloudflare.com/ajax/libs/twemoji/2.6.0/36x36/",
+        ext: ".png"
     };
 
     /**
@@ -3092,26 +3093,26 @@
             emoji: false, // :emoji: , Support Twemoji, fontAwesome, Editor.md logo emojis.
             tex: false, // TeX(LaTeX), based on KaTeX
         }
-        var settings = $.extend(defaults, options || {})
-        var marked = editormd.$marked
+        var settings = $.extend(defaults, options || {});
+        var marked = editormd.$marked;
         var markedRenderer = new marked.Renderer();
-        markdownToC = markdownToC || []
-        var regexs = editormd.regexs
-        var atLinkReg = regexs.atLink
-        var emojiReg = regexs.emoji
-        var emailReg = regexs.email
-        var emailLinkReg = regexs.emailLink
-        var twemojiReg = regexs.twemoji
-        var faIconReg = regexs.fontAwesome
-        var editormdLogoReg = regexs.editormdLogo
-        var pageBreakReg = regexs.pageBreak
+        markdownToC = markdownToC || [];
+        var regexs = editormd.regexs;
+        var atLinkReg = regexs.atLink;
+        var emojiReg = regexs.emoji;
+        var emailReg = regexs.email;
+        var emailLinkReg = regexs.emailLink;
+        var twemojiReg = regexs.twemoji;
+        var faIconReg = regexs.fontAwesome;
+        var editormdLogoReg = regexs.editormdLogo;
+        var pageBreakReg = regexs.pageBreak;
 
         markedRenderer.emoji = function (text) {
             text = text.replace(editormd.regexs.emojiDatetime, function ($1) {
                 return $1.replace(/:/g, "&#58;")
-            })
+            });
 
-            var matchs = text.match(emojiReg)
+            var matchs = text.match(emojiReg);
 
             if (!matchs || !settings.emoji) {
                 return text
@@ -3123,11 +3124,11 @@
                 }
 
                 text = text.replace(new RegExp(matchs[i]), function ($1, $2) {
-                    var faMatchs = $1.match(faIconReg)
-                    var name = $1.replace(/:/g, "")
+                    var faMatchs = $1.match(faIconReg);
+                    var name = $1.replace(/:/g, "");
                     if (faMatchs) {
                         for (var fa = 0, len1 = faMatchs.length; fa < len1; fa++) {
-                            var faName = faMatchs[fa].replace(/:/g, "")
+                            var faName = faMatchs[fa].replace(/:/g, "");
                             return (
                                 "<i class=\"fa " +
                                 faName +
@@ -3299,17 +3300,15 @@
             return text
         }
         markedRenderer.paragraph = function (text) {
-            var isTeXInline = /\$\$?([\s\S]*)\$?\$/g.test(text);
-            var isTeXLine = /^\$\$?([\s\S]*)\$?\$$/.test(text);
-            var isTeXAddClass = isTeXLine
-                ? " class=\"" + editormd.classNames.inline_tex + "\""
-                : "";
+            var isTeXInline = /\$\$([\s\S]*)\$\$/g.test(text);
+            var isTeXLine = /^\$\$([\s\S]*)\$\$$/.test(text);
+            var isTeXAddClass = isTeXLine ? " class=\"" + editormd.classNames.inline_tex + "\"" : "";
             var isToC = settings.tocm
                 ? /^(\[TOC\]|\[TOCM\])$/i.test(text)
-                : /^\[TOC\]$/i.test(text)
-            var isToCMenu = /^\[TOCM\]$/i.test(text)
+                : /^\[TOC\]$/i.test(text);
+            var isToCMenu = /^\[TOCM\]$/i.test(text);
             if (!isTeXLine && isTeXInline) {
-                text = text.replace(/(\$\$?([^\$]*)\$?\$)+/g, function ($1, $2) {
+                text = text.replace(/(\$\$([^\$]*)\$\$)+/g, function ($1, $2) {
                     return (
                         "<span class=\"" +
                         editormd.classNames.inline_tex +
@@ -3527,7 +3526,7 @@
      */
     editormd.filterHTMLTags = function (html, filters) {
         if (typeof html !== "string") {
-            html = new String(html)
+            html = String(html)
         }
         if (typeof filters !== "string") {
             return html
@@ -3637,8 +3636,7 @@
             div.append("<textarea></textarea>")
             saveTo = div.find("textarea")
         }
-        var markdownDoc =
-            settings.markdown === "" ? saveTo.val() : settings.markdown
+        var markdownDoc = settings.markdown === "" ? saveTo.val() : settings.markdown
         var markdownToC = []
         var rendererOptions = {
             toc: settings.toc,
@@ -3663,12 +3661,12 @@
             smartypants: true,
             langPrefix: "language-" //修改语言类名
         };
-        markdownDoc = new String(markdownDoc)
-        var markdownParsed = marked(markdownDoc, markedOptions)
+        markdownDoc = String(markdownDoc);
+        var markdownParsed = marked(markdownDoc, markedOptions);
         markdownParsed = editormd.filterHTMLTags(
             markdownParsed,
             settings.htmlDecode
-        )
+        );
 
         // FIXED marked.js render table structure with br tag inside, so this make it removed
         function removeBrTagInTable(text) {
@@ -3719,25 +3717,22 @@
         if (settings.tex) {
             var katexHandle = function () {
                 div.find("." + editormd.classNames.inline_tex).each(function () {
-                    var tex = $(this)
+                    var tex = $(this);
                     katex.render(
-                        tex
-                            .html()
-                            .replace(/&lt;/g, "<")
-                            .replace(/&gt;/g, ">"),
+                        tex.html().replace(/&lt;/g, "<").replace(/&gt;/g, ">"),
                         tex[0]
-                    )
+                    );
                     tex.find(".katex").css("font-size", "1.6em")
-                })
-            }
+                });
+            };
             if (settings.autoLoadKaTeX && !editormd.$katex && !editormd.kaTeXLoaded) {
                 this.loadKaTeX(function () {
-                    editormd.$katex = katex
-                    editormd.kaTeXLoaded = true
-                    katexHandle()
+                    editormd.$katex = katex;
+                    editormd.kaTeXLoaded = true;
+                    katexHandle();
                 })
             } else {
-                katexHandle()
+                katexHandle();
             }
         }
         if (settings.mind) {
@@ -3854,6 +3849,7 @@
         css: [],
         plugin: []
     };
+
     /**
      * 动态加载Editor.md插件，但不立即执行
      * Load editor.md plugins
@@ -3883,7 +3879,6 @@
      * @param {Function} [callback=function()] 加载成功后执行的回调函数
      * @param {String}   [into="head"]         嵌入页面的位置
      */
-
     editormd.loadCSS = function (fileName, callback, into) {
         into = into || "head"
         callback = callback || function () {
@@ -3915,7 +3910,6 @@
      * @param {Function} [callback=function()] 加载成功后执行的回调函数
      * @param {String}   [into="head"]         嵌入页面的位置
      */
-
     editormd.loadScript = function (fileName, callback, into) {
         into = into || "head"
         callback = callback || function () {

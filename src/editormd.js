@@ -1495,15 +1495,9 @@
                 return this;
             }
             this.previewContainer.find(".mermaid").each(function () {
-                var config = {
-                    startOnLoad: true,
-                    // flowchart:{
-                    //     useMaxWidth:false,
-                    //     htmlLabels:false
-                    // }
-                };
-                mermaid.init(config, ".mermaid");
-                //mermaid.initialize(config);
+                mermaid.initialize({
+                    startOnLoad: true
+                }, ".mermaid");
             });
 
             var $this = this;
@@ -3749,14 +3743,9 @@
                     editormd.$mermaid = mermaid;
                     editormd.mermaidLoaded = true;
                     div.find(".mermaid").each(function () {
-                        var config = {
-                            startOnLoad: true,
-                            // flowchart:{
-                            //     useMaxWidth:false,
-                            //     htmlLabels:false
-                            // }
-                        };
-                        mermaid.init(config, ".mermaid");
+                        mermaid.initialize({
+                            startOnLoad: true
+                        }, ".mermaid");
                     });
 
                 })

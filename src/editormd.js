@@ -3937,7 +3937,7 @@
 
     // 自定义Prismjs地址
     editormd.prismURL = {
-        url: "//cdn.jsdelivr.net/npm/prismjs@1.14.0"
+        url: "//cdn.jsdelivr.net/npm/prismjs@1.15.0"
     };
 
     // 使用国外的CDN，加载速度有时会很慢，或者自定义URL

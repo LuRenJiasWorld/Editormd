@@ -568,6 +568,7 @@
             var _this = this
             var settings = this.settings
             var loadPath = settings.path
+            var codeMirrirUrl = "//cdn.jsdelivr.net/npm/codemirror@5.39.0/"
             var loadMermaid = function () {
                 if (editormd.isIE8) {
                     _this.loadedDisplay()
@@ -582,25 +583,25 @@
                 }
             };
 
-            editormd.loadCSS(loadPath + "codemirror/lib/codemirror");
+            editormd.loadCSS(codeMirrirUrl + "lib/codemirror.min");
             if (settings.searchReplace && !settings.readOnly) {
-                editormd.loadCSS(loadPath + "codemirror/addon/dialog/dialog");
-                editormd.loadCSS(loadPath + "codemirror/addon/search/matchesonscrollbar")
+                editormd.loadCSS(codeMirrirUrl + "addon/dialog/dialog.min");
+                editormd.loadCSS(codeMirrirUrl + "addon/search/matchesonscrollbar.min")
             }
             if (settings.codeFold) {
-                editormd.loadCSS(loadPath + "codemirror/addon/fold/foldgutter")
+                editormd.loadCSS(codeMirrirUrl + "addon/fold/foldgutter.min")
             }
-            editormd.loadScript(loadPath + "codemirror/lib/codemirror", function () {
+            editormd.loadScript(codeMirrirUrl + "lib/codemirror.min", function () {
                 editormd.$CodeMirror = CodeMirror;
-                editormd.loadScript(loadPath + "codemirror/modes.min", function () {
-                    editormd.loadScript(loadPath + "codemirror/addons.min", function () {
+                editormd.loadScript(loadPath + "modes.min", function () {
+                    editormd.loadScript(loadPath + "addons.min", function () {
                         _this.setCodeMirror();
                         if (settings.mode !== "gfm" && settings.mode !== "markdown") {
                             _this.loadedDisplay();
                             return false
                         }
                         _this.setToolbar()
-                        editormd.loadScript(loadPath + "marked.min", function () {
+                        editormd.loadScript("//cdn.jsdelivr.net/npm/marked@0.4.0/lib/marked.min", function () {
                             editormd.$marked = marked
 
                             if (settings.previewCodeHighlight) {

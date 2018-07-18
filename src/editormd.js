@@ -1495,7 +1495,7 @@
                 return this;
             }
             this.previewContainer.find(".mermaid").each(function () {
-                mermaid.initialize({
+                editormd.$mermaid.initialize({
                     startOnLoad: true
                 }, ".mermaid");
             });
@@ -3743,7 +3743,7 @@
                     editormd.$mermaid = mermaid;
                     editormd.mermaidLoaded = true;
                     div.find(".mermaid").each(function () {
-                        mermaid.initialize({
+                        editormd.$mermaid.initialize({
                             startOnLoad: true
                         }, ".mermaid");
                     });

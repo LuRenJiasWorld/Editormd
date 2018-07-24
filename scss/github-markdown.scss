@@ -641,3 +641,19 @@
     position: relative;
     border-color: #4183c4;
 }
+
+.markdown-body img.more {
+    background: transparent url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAB2wAAAAUCAMAAAB28j3QAAAAPFBMVEVMaXG7yd/fybu7wdL/6s67u7vSwbv/3sjI3v/O6v+7u8nB0u7Bu7vJu7u7u8Hu0sHBycm7ydLJybvJu8Gz2eUyAAAACnRSTlMA////P///s7M/0Um8/wAAAQdJREFUeNrt28tuwjAUBNCJzU1CEqCP///XLqhUlS5pKx7nbDxbW4pGtuMEAAAAAAAAAAAA4L+NtSbJqXqSqapqTjJW1XF/Hmu2SgBwVdn2JDlUT041J1OtyTgkbTmPAMB1Zfuyzcm0vPXkMCRfJXs67pUtAPxC2Q5tSNrQenbbmiTTZ8mO3c4W7klVVdXT5CebrnzH+Vy205K871vPbpuTZKo5Y1UNOd/ZLs/6KcsPkZ9ptspWlm+4bHOYp54fO9u25HJna91kZXsPXzVwg8fIaa/jmnZ5Z7vbVsfIAPA7ZTvVcZ/mb2QA+LOyzaEn7fs72yHZbYN3tgAAAAAAAAAAAAAA8OA+APMLKOOI5E5PAAAAAElFTkSuQmCC) repeat-y scroll center center;
+    border: 0;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    width: 96%;
+    height: 16px;
+    display: block;
+    margin: 15px auto 0;
+    outline: 0;
+    cursor: default;
+    border-radius: 0;
+    padding: 0;
+    resize: none;
+}

@@ -80,6 +80,7 @@
             "emoji",
             "html-entities",
             "pagebreak",
+            "more",
             "|",
             "goto-line",
             "watch",
@@ -202,6 +203,7 @@
         tocStartLevel: 1, // Said from H1 to create ToC
         htmlDecode: false, // Open the HTML tag identification
         pageBreak: true, // Enable parse page break <!--nextpage-->
+        more: true, // Enable parse page break <!--more-->
         atLink: true, // for @link
         emailLink: true, // for email address auto link
         taskList: false, // Enable Github Flavored Markdown task lists
@@ -261,6 +263,7 @@
             emoji: "fa-smile-o",
             "html-entities": "fa-copyright",
             pagebreak: "fa-newspaper-o",
+            more: "fa-ellipsis-h",
             "goto-line": "fa-terminal", // fa-crosshairs
             watch: "fa-eye-slash",
             unwatch: "fa-eye",
@@ -307,6 +310,7 @@
                 emoji: "Emoji表情",
                 "html-entities": "HTML实体字符",
                 pagebreak: "插入分页符",
+                more: "插入摘要符",
                 "goto-line": "跳转到行",
                 watch: "关闭实时预览",
                 unwatch: "开启实时预览",
@@ -1865,6 +1869,7 @@
                 tocm: settings.tocm,
                 tocStartLevel: settings.tocStartLevel,
                 pageBreak: settings.pageBreak,
+                more: settings.more,
                 taskList: settings.taskList,
                 emoji: settings.emoji,
                 tex: settings.tex,
@@ -2801,7 +2806,16 @@
             }
             var cm = this.cm
             var selection = cm.getSelection()
-            cm.replaceSelection("\r\n<!--nextpage-->\r\n")
+            cm.replaceSelection("\r\n<!--nextpage-->\r\n");
+        },
+        more: function () {
+            if (!this.settings.more) {
+                alert("settings.more === false")
+                return this
+            }
+            var cm = this.cm
+            var selection = cm.getSelection()
+            cm.replaceSelection("\r\n<!--more-->\r\n");
         },
         image: function () {
             this.executePlugin("imageDialog", "image-dialog/image-dialog")
@@ -2986,6 +3000,7 @@
             _defineProperty(_editormd$keyMaps, "Shift-" + key + "-P", "preformatted-text"),
             _defineProperty(_editormd$keyMaps, "Shift-" + key + "-T", "table"),
             _defineProperty(_editormd$keyMaps, "Shift-Alt-P", "pagebreak"),
+            _defineProperty(_editormd$keyMaps, "Shift-Alt-M", "more"),
             _defineProperty(_editormd$keyMaps, "F9", "watch"),
             _defineProperty(_editormd$keyMaps, "F10", "preview"),
             _defineProperty(_editormd$keyMaps, "F11", "fullscreen"),
@@ -3050,8 +3065,8 @@
         twemoji: /:(tw-([\w]+)-?(\w+)?):/g,
         fontAwesome: /:(fa-([\w]+)(-(\w+)){0,}):/g,
         editormdLogo: /:(editormd-logo-?(\w+)?):/g,
-        //pageBreak: /^<!--more-->/
-        pageBreak: /^\[[=]{8,}\]$/
+        pageBreak: /^<!--nextpage-->/mg,
+        more: /^<!--more-->/mg
 
     };
     // Emoji graphics files url path
@@ -3080,6 +3095,7 @@
             tocm: false,
             tocStartLevel: 1, // Said from H1 to create ToC
             pageBreak: true,
+            more: true,
             atLink: true, // for @link
             emailLink: true, // for mail address auto link
             taskList: false, // Enable Github Flavored Markdown task lists
@@ -3098,7 +3114,8 @@
         var twemojiReg = regexs.twemoji;
         var faIconReg = regexs.fontAwesome;
         var editormdLogoReg = regexs.editormdLogo;
-        var pageBreakReg = regexs.pageBreak;
+        var pageBreakReg = /&lt;!--nextpage--&gt;/mg;
+        var moreReg = /&lt;!--more--&gt;/mg;
 
         markedRenderer.emoji = function (text) {
             text = text.replace(editormd.regexs.emojiDatetime, function ($1) {
@@ -3285,13 +3302,24 @@
             headingHTML += "</h" + level + ">"
             return headingHTML
         }
+
         markedRenderer.pageBreak = function (text) {
+            pageBreakReg.test(text)
             if (pageBreakReg.test(text) && settings.pageBreak) {
-                text =
-                    "<hr style=\"page-break-after:always;\" class=\"page-break editormd-page-break\" />"
+
+                text = "<hr style=\"page-break-after:always;\" class=\"page-break editormd-page-break\" />"
             }
             return text
         }
+
+        markedRenderer.more = function (text) {
+            moreReg.test(text)
+            if (moreReg.test(text) && settings.more) {
+                text = "<p><img class=\"editormd-more more\" src=\"data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7\"></p>"
+            }
+            return text
+        }
+
         markedRenderer.paragraph = function (text) {
             var isTeXInline = /\$\$([\s\S]*)\$\$/g.test(text);
             var isTeXLine = /^\$\$([\s\S]*)\$\$$/.test(text);
@@ -3313,20 +3341,21 @@
             } else {
                 text = isTeXLine ? text.replace(/\$/g, "") : text;
             }
-            var tocHTML =
-                "<div class=\"markdown-toc editormd-markdown-toc\">" + text + "</div>"
-            return isToC
-                ? isToCMenu
-                    ? "<div class=\"editormd-toc-menu\">" + tocHTML + "</div><br/>"
+            var tocHTML = "<div class=\"markdown-toc editormd-markdown-toc\">" + text + "</div>"
+
+            return isToC ? isToCMenu ? "<div class=\"editormd-toc-menu\">" + tocHTML + "</div><br/>"
                     : tocHTML
-                : pageBreakReg.test(text)
+                    : pageBreakReg.test(text)
                     ? this.pageBreak(text)
+                    : moreReg.test(text)
+                    ? this.more(text)
                     : "<p" +
                     isTeXAddClass +
                     ">" +
                     this.atLink(this.emoji(text)) +
                     "</p>\n"
         }
+
         markedRenderer.code = function (code, lang, escaped) {
             if (lang === "mermaid") {
                 return "<div class='mermaid'>" + code + "</div>";
@@ -3340,6 +3369,7 @@
                 return marked.Renderer.prototype.code.apply(this, arguments)
             }
         }
+
         markedRenderer.tablecell = function (content, flags) {
             var type = flags.header ? "th" : "td"
             var tag = flags.align
@@ -3347,6 +3377,7 @@
                 : "<" + type + ">"
             return tag + this.atLink(this.emoji(content)) + "</" + type + ">\n"
         }
+
         markedRenderer.listitem = function (text) {
             if (settings.taskList && /^\s*\[[x\s]\]\s*/.test(text)) {
                 text = text
@@ -3584,6 +3615,20 @@
                 })
             }
         }
+
+
+        //正则匹配 - 分页符
+        var nextpage = editormd.regexs.pageBreak;
+        if (nextpage.test(html)) {
+            html = html.replace(nextpage,"<hr style=\"page-break-after:always;\" class=\"page-break editormd-page-break\" />")
+        }
+
+        //正则匹配 - 摘要符
+        var more = editormd.regexs.more;
+        if (more.test(html)) {
+            html = html.replace(more,"<p><img class=\"more\" src=\"data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7\"></p>")
+        }
+
         return html
     }
 
@@ -3610,6 +3655,7 @@
             autoLoadKaTeX: true,
             autoLoadMermaid: true,
             pageBreak: true,
+            more: true,
             atLink: true, // for @link
             emailLink: true, // for mail address auto link
             tex: false,
@@ -3639,6 +3685,7 @@
             emoji: settings.emoji,
             tex: settings.tex,
             pageBreak: settings.pageBreak,
+            more: settings.more,
             atLink: settings.atLink, // for @link
             emailLink: settings.emailLink, // for mail address auto link
             previewCodeHighlight: settings.previewCodeHighlight
@@ -3676,11 +3723,8 @@
         } else {
             saveTo.remove()
         }
-        div
-            .addClass("markdown-body " + this.classPrefix + "html-preview")
-            .append(markdownParsed)
-        var tocContainer =
-            settings.tocContainer !== "" ? $(settings.tocContainer) : div
+        div.addClass("markdown-body " + this.classPrefix + "html-preview").append(markdownParsed)
+        var tocContainer = settings.tocContainer !== "" ? $(settings.tocContainer) : div
         if (settings.tocContainer !== "") {
             tocContainer.attr("previewContainer", false)
         }

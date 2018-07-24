@@ -1,3 +1,3 @@
-- 支持<!--more-->和<!--nextpage-->
-- 支持Chart Extension
-- 支持UML Extension
+- [x]支持<!--more-->和<!--nextpage-->
+- [ ]支持Chart Extension
+- [ ]支持UML Extension

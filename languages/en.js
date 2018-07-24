@@ -33,7 +33,8 @@
                 datetime         : "Datetime",
                 emoji            : "Emoji",
                 "html-entities"  : "HTML Entities",
-                pagebreak        : "Page break",
+                pagebreak        : "Page Break",
+                more             : "Read More",
                 watch            : "Unwatch",
                 unwatch          : "Watch",
                 preview          : "HTML Preview (Press Shift + ESC exit)",
@@ -76,11 +77,11 @@
                     formatNotAllowed : "Error: only allows to upload pictures file, upload allowed image file format:"
                 },
                 preformattedText : {
-                    title             : "Preformatted text / Codes", 
+                    title             : "Preformatted text / Codes",
                     emptyAlert        : "Error: Please fill in the Preformatted text or content of the codes."
                 },
                 codeBlock : {
-                    title             : "Code block",         
+                    title             : "Code block",
                     selectLabel       : "Languages: ",
                     selectDefaultText : "select a code language...",
                     otherLanguage     : "Other languages",
@@ -95,13 +96,13 @@
                 }
             }
         };
-        
+
         exports.defaults.lang = lang;
     };
-    
+
 	// CommonJS/Node.js
 	if (typeof require === "function" && typeof exports === "object" && typeof module === "object")
-    { 
+    {
         module.exports = factory;
     }
 	else if (typeof define === "function")  // AMD/CMD/Sea.js
@@ -118,10 +119,10 @@
                 factory(editormd);
             });
 		}
-	} 
+	}
 	else
 	{
         factory(window.editormd);
 	}
-    
+
 })();

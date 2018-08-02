@@ -572,7 +572,6 @@
             var _this = this
             var settings = this.settings
             var loadPath = settings.path
-            var codeMirrirUrl = "//cdn.jsdelivr.net/npm/codemirror@5.39.0/"
             var loadMermaid = function () {
                 if (editormd.isIE8) {
                     _this.loadedDisplay()
@@ -587,15 +586,15 @@
                 }
             };
 
-            editormd.loadCSS(codeMirrirUrl + "lib/codemirror.min");
+            editormd.loadCSS(editormd.codeMirrorURL.url + "/lib/codemirror.min");
             if (settings.searchReplace && !settings.readOnly) {
-                editormd.loadCSS(codeMirrirUrl + "addon/dialog/dialog.min");
-                editormd.loadCSS(codeMirrirUrl + "addon/search/matchesonscrollbar.min")
+                editormd.loadCSS(editormd.codeMirrorURL.url + "/addon/dialog/dialog.min");
+                editormd.loadCSS(editormd.codeMirrorURL.url + "/addon/search/matchesonscrollbar.min")
             }
             if (settings.codeFold) {
-                editormd.loadCSS(codeMirrirUrl + "addon/fold/foldgutter.min")
+                editormd.loadCSS(editormd.codeMirrorURL.url + "/addon/fold/foldgutter.min")
             }
-            editormd.loadScript(codeMirrirUrl + "lib/codemirror.min", function () {
+            editormd.loadScript(editormd.codeMirrorURL.url + "/lib/codemirror.min", function () {
                 editormd.$CodeMirror = CodeMirror;
                 editormd.loadScript(loadPath + "modes.min", function () {
                     editormd.loadScript(loadPath + "addons.min", function () {
@@ -1500,7 +1499,7 @@
                 return this;
             }
             this.previewContainer.find(".mermaid").each(function () {
-                editormd.$mermaid.initialize({
+                editormd.$mermaid.init({
                     startOnLoad: true
                 }, ".mermaid");
             });
@@ -1895,6 +1894,18 @@
                 newMarkdownDoc,
                 settings.htmlDecode
             );
+
+            //正则匹配 - 分页符
+            var nextpage = editormd.regexs.pageBreak;
+            if (nextpage.test(newMarkdownDoc)) {
+                newMarkdownDoc = newMarkdownDoc.replace(nextpage,"<hr style=\"page-break-after:always;\" class=\"page-break editormd-page-break\" />")
+            }
+
+            //正则匹配 - 摘要符
+            var more = editormd.regexs.more;
+            if (more.test(newMarkdownDoc)) {
+                newMarkdownDoc = newMarkdownDoc.replace(more,"<p><img class=\"more\" src=\"data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7\"></p>")
+            }
 
             // FIXED marked.js render table structure with br tag inside, so this make it removed
             function removeBrTagInTable(text) {
@@ -3321,15 +3332,15 @@
         }
 
         markedRenderer.paragraph = function (text) {
-            var isTeXInline = /\$\$([\s\S]*)\$\$/g.test(text);
-            var isTeXLine = /^\$\$([\s\S]*)\$\$$/.test(text);
+            var isTeXInline = /\$\$*([\s\S]*)\$*\$/g.test(text); //行内公式
+            var isTeXLine = /^\$\$*([\s\S]*)\$*\$$/.test(text); //多行公式
             var isTeXAddClass = isTeXLine ? " class=\"" + editormd.classNames.inline_tex + "\"" : "";
             var isToC = settings.tocm
                 ? /^(\[TOC\]|\[TOCM\])$/i.test(text)
                 : /^\[TOC\]$/i.test(text);
             var isToCMenu = /^\[TOCM\]$/i.test(text);
             if (!isTeXLine && isTeXInline) {
-                text = text.replace(/(\$\$([^\$]*)\$\$)+/g, function ($1, $2) {
+                text = text.replace(/(\$\$*([^\$]*)\$*\$)+/g, function ($1, $2) {
                     return (
                         "<span class=\"" +
                         editormd.classNames.inline_tex +
@@ -3616,19 +3627,6 @@
             }
         }
 
-
-        //正则匹配 - 分页符
-        var nextpage = editormd.regexs.pageBreak;
-        if (nextpage.test(html)) {
-            html = html.replace(nextpage,"<hr style=\"page-break-after:always;\" class=\"page-break editormd-page-break\" />")
-        }
-
-        //正则匹配 - 摘要符
-        var more = editormd.regexs.more;
-        if (more.test(html)) {
-            html = html.replace(more,"<p><img class=\"more\" src=\"data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7\"></p>")
-        }
-
         return html
     }
 
@@ -3708,6 +3706,18 @@
             settings.htmlDecode
         );
 
+        //正则匹配 - 分页符
+        var nextpage = editormd.regexs.pageBreak;
+        if (nextpage.test(markdownParsed)) {
+            markdownParsed = markdownParsed.replace(nextpage,"<hr style=\"page-break-after:always;\" class=\"page-break editormd-page-break\" />")
+        }
+
+        //正则匹配 - 摘要符
+        var more = editormd.regexs.more;
+        if (more.test(markdownParsed)) {
+            markdownParsed = markdownParsed.replace(more,"<p><img class=\"more\" src=\"data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7\"></p>")
+        }
+
         // FIXED marked.js render table structure with br tag inside, so this make it removed
         function removeBrTagInTable(text) {
             var tableRegex = /<table[^>]*(.|[\n\r])*?<\/table>/gim;
@@ -3786,7 +3796,7 @@
                     editormd.$mermaid = mermaid;
                     editormd.mermaidLoaded = true;
                     div.find(".mermaid").each(function () {
-                        editormd.$mermaid.initialize({
+                        editormd.$mermaid.init({
                             startOnLoad: true
                         }, ".mermaid");
                     });
@@ -3980,6 +3990,11 @@
     // 自定义Prismjs地址
     editormd.prismURL = {
         url: "//cdn.jsdelivr.net/npm/prismjs@1.15.0"
+    };
+
+    // 自定义Mirror地址
+    editormd.codeMirrorURL = {
+        url: "//cdn.jsdelivr.net/npm/codemirror@5.39.0"
     };
 
     // 使用国外的CDN，加载速度有时会很慢，或者自定义URL

@@ -12,6 +12,7 @@
     var notify = require("gulp-notify");
     var header = require("gulp-header");
     var minifycss = require("gulp-minify-css");
+    var sourcemaps = require("gulp-sourcemaps");
     //var jsdoc        = require('gulp-jsdoc');
     //var jsdoc2md     = require('gulp-jsdoc-to-markdown');
     var pkg = require("./package.json");
@@ -42,8 +43,9 @@
 
         var distPath = "./";
 
-        return sass(path + fileName + ".scss", {style: "expanded", sourcemap: false, noCache: true})
+        return sass(path + fileName + ".scss", {style: "expanded", sourcemap: true, noCache: true})
             .pipe(gulp.dest(distPath))
+            .pipe(sourcemaps.init({loadMaps: true}))
             .pipe(header(headerComment, {
                 pkg: pkg, fileName: function (file) {
                     var name = file.path.split(file.base);
@@ -61,6 +63,7 @@
                     return name[1].replace("\\", "");
                 }
             }))
+            .pipe(sourcemaps.write('./'))
             .pipe(gulp.dest(distPath))
             .pipe(notify({message: fileName + ".scss task completed!"}));
     };
@@ -68,17 +71,16 @@
     gulp.task("scss", function () {
         return scssTask("editormd");
     });
-
     gulp.task("scss2", function () {
         return scssTask("editormd.preview");
     });
-
     gulp.task("scss3", function () {
         return scssTask("editormd.logo");
     });
 
     gulp.task("js", function () {
         return gulp.src("./src/editormd.js")
+            .pipe(sourcemaps.init({loadMaps: true}))
         //.pipe(jshint('./.jshintrc'))
         //.pipe(jshint.reporter('default'))
             .pipe(eslint("./.eslintrc"))
@@ -103,6 +105,7 @@
                     return name[1].replace(/[\\\/]?/, "");
                 }
             }))
+            .pipe(sourcemaps.write('./'))
             .pipe(gulp.dest("./"))
             .pipe(notify({message: "editormd.js task complete"}));
     });
@@ -187,6 +190,7 @@
         ].join("\r\n");
 
         gulp.src("src/editormd.js")
+            .pipe(sourcemaps.init({loadMaps: true}))
             .pipe(rename({suffix: ".amd"}))
             .pipe(gulp.dest("./"))
             .pipe(header(headerComment, {
@@ -213,11 +217,10 @@
                     return name[1].replace(/[\\\/]?/, "");
                 }
             }))
+            .pipe(sourcemaps.write("./"))
             .pipe(gulp.dest("./"))
             .pipe(notify({message: "amd version task complete"}));
     });
-
-
     var codeMirror = {
         path: {
             src: {
@@ -282,7 +285,6 @@
             "search/match-highlighter"
         ]
     };
-
     gulp.task("cm-mode", function () {
 
         var modes = [
@@ -308,16 +310,12 @@
             .pipe(gulp.dest(codeMirror.path.dist))
             .pipe(notify({message: "codemirror-mode task complete!"}));
     });
-
     gulp.task("cm-addon", function () {
-
         var addons = [];
-
         for (var i in codeMirror.addons) {
             var addon = codeMirror.addons[i];
             addons.push(codeMirror.path.src.addon + "/" + addon + ".js");
         }
-
         return gulp.src(addons)
             .pipe(concat("addons.min.js"))
             .pipe(gulp.dest(codeMirror.path.dist))

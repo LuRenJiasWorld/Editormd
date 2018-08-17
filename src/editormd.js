@@ -3386,7 +3386,7 @@
             var tag = flags.align
                 ? "<" + type + " style=\"text-align:" + flags.align + "\">"
                 : "<" + type + ">"
-            return tag + this.atLink(this.emoji(content)) + "</" + type + ">\n"
+            return tag + this.paragraph(this.atLink(this.emoji(content))) + "</" + type + ">\n"
         }
 
         markedRenderer.listitem = function (text) {
@@ -3406,7 +3406,7 @@
                     "</li>"
                 )
             } else {
-                return "<li>" + this.atLink(this.emoji(text)) + "</li>"
+                return "<li>" + this.paragraph(this.atLink(this.emoji(text))) + "</li>"
             }
         }
         return markedRenderer
@@ -3994,7 +3994,7 @@
 
     // 自定义Mirror地址
     editormd.codeMirrorURL = {
-        url: "//cdn.jsdelivr.net/npm/codemirror@5.39.0"
+        url: "//cdn.jsdelivr.net/npm/codemirror@5.39.2"
     };
 
     // 使用国外的CDN，加载速度有时会很慢，或者自定义URL

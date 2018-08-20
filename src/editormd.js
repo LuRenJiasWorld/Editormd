@@ -535,9 +535,9 @@
                     editormd.$katex = katex
                 }
                 if (settings.searchReplace && !settings.readOnly) {
-                    editormd.loadCSS(settings.path + "codemirror/addon/dialog/dialog")
+                    editormd.loadCSS(editormd.codeMirrorURL.url + "/addon/dialog/dialog")
                     editormd.loadCSS(
-                        settings.path + "codemirror/addon/search/matchesonscrollbar"
+                        editormd.codeMirrorURL.url + "/addon/search/matchesonscrollbar"
                     )
                 }
             }
@@ -649,7 +649,7 @@
             settings.editorTheme = theme
             if (theme !== "default") {
                 editormd.loadCSS(
-                    settings.path + "codemirror/theme/" + settings.editorTheme
+                    editormd.codeMirrorURL.url + "/theme/" + settings.editorTheme
                 )
             }
             this.cm.setOption("theme", theme)
@@ -696,7 +696,7 @@
             var editor = this.editor
             if (settings.editorTheme !== "default") {
                 editormd.loadCSS(
-                    settings.path + "codemirror/theme/" + settings.editorTheme
+                    editormd.codeMirrorURL.url + "/theme/" + settings.editorTheme
                 )
             }
             var codeMirrorConfig = {

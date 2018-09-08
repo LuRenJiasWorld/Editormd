@@ -3332,15 +3332,15 @@
         }
 
         markedRenderer.paragraph = function (text) {
-            var isTeXInline = /\$\$*([\s\S]*)\$*\$/g.test(text); //行内公式
-            var isTeXLine = /^\$\$*([\s\S]*)\$*\$$/.test(text); //多行公式
-            var isTeXAddClass = isTeXLine ? " class=\"" + editormd.classNames.inline_tex + "\"" : "";
+            var isTeXInline = /\$(.*)\$/g.test(text); //行内公式
+            var isTeXLine = /^\$\$(.*)\$\$$/.test(text); //多行公式
+            var isTeXAddClass = isTeXLine ? " class=\"" + editormd.classNames.block_tex + "\"" : "";
             var isToC = settings.tocm
                 ? /^(\[TOC\]|\[TOCM\])$/i.test(text)
                 : /^\[TOC\]$/i.test(text);
             var isToCMenu = /^\[TOCM\]$/i.test(text);
             if (!isTeXLine && isTeXInline) {
-                text = text.replace(/(\$\$*([^\$]*)\$*\$)+/g, function ($1, $2) {
+                text = text.replace(/(\$([^\$]*)\$)+/g, function ($1, $2) {
                     return (
                         "<span class=\"" +
                         editormd.classNames.inline_tex +
@@ -3365,21 +3365,19 @@
                     ">" +
                     this.atLink(this.emoji(text)) +
                     "</p>\n"
-        }
+        };
 
         markedRenderer.code = function (code, lang, escaped) {
             if (lang === "mermaid") {
                 return "<div class='mermaid'>" + code + "</div>";
             } else if (lang === "mind") {
-                // console.log("mind\n", parseList(code));
-                //console.log(code);
                 return "<div class=\"mind\" style=\"width: 100%;overflow-x: auto;\"><canvas></canvas><div class=\"mindTxt\">" + code + "</div></div>";
             } else if (lang === "math" || lang === "latex" || lang === "katex") {
                 return "<p class=\"" + editormd.classNames.block_tex + "\">" + code + "</p>"
             } else {
                 return marked.Renderer.prototype.code.apply(this, arguments)
             }
-        }
+        };
 
         markedRenderer.tablecell = function (content, flags) {
             var type = flags.header ? "th" : "td"

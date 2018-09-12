@@ -604,7 +604,7 @@
                             return false
                         }
                         _this.setToolbar()
-                        editormd.loadScript("//cdn.jsdelivr.net/npm/marked@0.4.0/lib/marked.min", function () {
+                        editormd.loadScript("//cdn.jsdelivr.net/npm/marked@0.5.0/lib/marked.min", function () {
                             editormd.$marked = marked
 
                             if (settings.previewCodeHighlight) {
@@ -3214,7 +3214,7 @@
                 if (settings.atLink) {
                     text = text.replace(emailReg, function ($1, $2, $3, $4) {
                         return $1.replace(/@/g, "_#_&#64;_#_")
-                    })
+                    });
                     text = text
                         .replace(atLinkReg, function ($1, $2) {
                             return (
@@ -3235,7 +3235,8 @@
                     text = text.replace(emailLinkReg, function ($1, $2, $3, $4, $5) {
                         return !$2 &&
                         $.inArray($5, "jpg|jpeg|png|gif|webp|ico|icon|pdf".split("|")) < 0
-                            ? "<a href=\"mailto:" + $1 + "\">" + $1 + "</a>"
+                            //? "<a href=\"mailto:" + $1 + "\">" + $1 + "</a>"
+                            ? "mailto:" + $1
                             : $1
                     })
                 }
@@ -3332,6 +3333,7 @@
         }
 
         markedRenderer.paragraph = function (text) {
+            text = text.replace("<em>","_").replace("</em>","_");  //在如果公式含有_则会被Markdown解析，所以现在需要转换过来
             var isTeXInline = /\$(.*)\$/g.test(text); //行内公式
             var isTeXLine = /^\$\$(.*)\$\$$/.test(text); //多行公式
             var isTeXAddClass = isTeXLine ? " class=\"" + editormd.classNames.block_tex + "\"" : "";

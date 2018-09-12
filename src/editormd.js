@@ -604,7 +604,7 @@
                             return false
                         }
                         _this.setToolbar()
-                        editormd.loadScript("//cdn.jsdelivr.net/npm/marked@0.5.0/lib/marked.min", function () {
+                        editormd.loadScript(editormd.markedURL.js, function () {
                             editormd.$marked = marked
 
                             if (settings.previewCodeHighlight) {
@@ -3243,7 +3243,7 @@
                 return text
             }
             return text
-        }
+        };
 
         markedRenderer.link = function (href, title, text) {
             if (this.options.sanitize) {
@@ -3989,19 +3989,24 @@
 
     // 自定义Prismjs地址
     editormd.prismURL = {
-        url: "//cdn.jsdelivr.net/npm/prismjs@1.15.0"
+        url: "//cdn.jsdelivr.net/npm/prismjs"
     };
 
     // 自定义Mirror地址
     editormd.codeMirrorURL = {
-        url: "//cdn.jsdelivr.net/npm/codemirror@5.39.2"
+        url: "//cdn.jsdelivr.net/npm/codemirror"
+    };
+
+    // 自定义Marked地址
+    editormd.markedURL = {
+        js: "//cdn.jsdelivr.net/npm/marked/lib/marked.min"
     };
 
     // 使用国外的CDN，加载速度有时会很慢，或者自定义URL
     // You can custom KaTeX load url.
     editormd.katexURL = {
-        css: "//cdn.jsdelivr.net/npm/katex@0.9.0/dist/katex.min",
-        js: "//cdn.jsdelivr.net/npm/katex@0.9.0/dist/katex.min"
+        css: "//cdn.jsdelivr.net/npm/katex/dist/katex.min",
+        js: "//cdn.jsdelivr.net/npm/katex/dist/katex.min"
     };
     editormd.kaTeXLoaded = false;
 
@@ -4020,7 +4025,7 @@
 
     //===========
     editormd.mermaidURL = {
-        js: "//cdn.jsdelivr.net/npm/mermaid@8.0.0-rc.8/dist/mermaid.min"
+        js: "//cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min"
     };
     editormd.mermaidLoaded = false;
 

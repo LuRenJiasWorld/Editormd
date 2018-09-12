@@ -3342,7 +3342,7 @@
                 : /^\[TOC\]$/i.test(text);
             var isToCMenu = /^\[TOCM\]$/i.test(text);
             if (!isTeXLine && isTeXInline) {
-                text = text.replace(/\\<br>+/g,"\\\\\\\\<br>"); //只能用于换行（特征：/<br>）
+                text = text.replace(/\\<br>+/g,"\\\\<br>"); //只能用于换行（特征：/<br>）
                 text = text.replace(/(\$([^\$]*)\$)+/g, function ($1, $2) {
                     return (
                         "<span class=\"" +
@@ -3353,6 +3353,7 @@
                     )
                 })
             } else {
+                text = text.replace(/\\<br>+/g,"\\\\<br>"); //只能用于换行（特征：/<br>）
                 text = isTeXLine ? text.replace(/\$/g, "") : text;
             }
             var tocHTML = "<div class=\"markdown-toc editormd-markdown-toc\">" + text + "</div>"

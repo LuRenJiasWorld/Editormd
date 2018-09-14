@@ -519,15 +519,15 @@
             }
             if (settings.prismTheme !== "") {
                 if (settings.prismTheme === "default") {
-                    editormd.loadCSS(editormd.prismURL.url + "/themes/prism.min");
+                    editormd.loadCSS(editormd.prismURL.url + "/themes/prism");
                 } else {
-                    editormd.loadCSS(editormd.prismURL.url + "/themes/prism-" + settings.prismTheme + ".min");
+                    editormd.loadCSS(editormd.prismURL.url + "/themes/prism-" + settings.prismTheme);
                 }
             }
 
             if (settings.prismLineNumbers) {
-                editormd.loadCSS(editormd.prismURL.url + "/plugins/line-numbers/prism-line-numbers.min");
-                editormd.loadScript(editormd.prismURL.url + "/plugins/line-numbers/prism-line-numbers.min");
+                editormd.loadCSS(editormd.prismURL.url + "/plugins/line-numbers/prism-line-numbers");
+                editormd.loadScript(editormd.prismURL.url + "/plugins/line-numbers/prism-line-numbers");
             }
 
             if (typeof define === "function" && define.amd) {
@@ -586,15 +586,15 @@
                 }
             };
 
-            editormd.loadCSS(editormd.codeMirrorURL.url + "/lib/codemirror.min");
+            editormd.loadCSS(editormd.codeMirrorURL.url + "/lib/codemirror");
             if (settings.searchReplace && !settings.readOnly) {
-                editormd.loadCSS(editormd.codeMirrorURL.url + "/addon/dialog/dialog.min");
-                editormd.loadCSS(editormd.codeMirrorURL.url + "/addon/search/matchesonscrollbar.min")
+                editormd.loadCSS(editormd.codeMirrorURL.url + "/addon/dialog/dialog");
+                editormd.loadCSS(editormd.codeMirrorURL.url + "/addon/search/matchesonscrollbar")
             }
             if (settings.codeFold) {
-                editormd.loadCSS(editormd.codeMirrorURL.url + "/addon/fold/foldgutter.min")
+                editormd.loadCSS(editormd.codeMirrorURL.url + "/addon/fold/foldgutter")
             }
-            editormd.loadScript(editormd.codeMirrorURL.url + "/lib/codemirror.min", function () {
+            editormd.loadScript(editormd.codeMirrorURL.url + "/lib/codemirror", function () {
                 editormd.$CodeMirror = CodeMirror;
                 editormd.loadScript(loadPath + "modes.min", function () {
                     editormd.loadScript(loadPath + "addons.min", function () {
@@ -4001,7 +4001,7 @@
 
     // 自定义Marked地址
     editormd.markedURL = {
-        js: "//cdn.jsdelivr.net/npm/marked/lib/marked.min"
+        js: "//cdn.jsdelivr.net/npm/marked/lib/marked"
     };
 
     // 使用国外的CDN，加载速度有时会很慢，或者自定义URL

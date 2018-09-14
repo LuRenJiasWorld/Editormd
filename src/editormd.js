@@ -3258,7 +3258,7 @@
                     return ""
                 }
             }
-            var out = "<a href=\"" + href + "\""
+            var out = "<a target=\"_blank\" href=\"" + href + "\""
             if (atLinkReg.test(title) || atLinkReg.test(text)) {
                 if (title) {
                     out += " title=\"" + title.replace(/@/g, "&#64;")

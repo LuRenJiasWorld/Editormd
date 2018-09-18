@@ -3333,7 +3333,7 @@
         }
 
         markedRenderer.paragraph = function (text) {
-            text = text.replace("<em>","_").replace("</em>","_");  //在如果公式含有_则会被Markdown解析，所以现在需要转换过来
+            //text = text.replace("<em>","_").replace("</em>","_");  //在如果公式含有_则会被Markdown解析，所以现在需要转换过来
             var isTeXInline = /\$(.*)\$/g.test(text); //行内公式
             var isTeXLine = /^\$\$(.*)\$\$$/.test(text); //多行公式
             var isTeXAddClass = isTeXLine ? " class=\"" + editormd.classNames.block_tex + "\"" : "";
@@ -3348,13 +3348,13 @@
                         "<span class=\"" +
                         editormd.classNames.inline_tex +
                         "\">" +
-                        $2.replace(/\$/g, "") +
+                        $2.replace(/\$/g, "").replace("<em>","_").replace("</em>","_") +
                         "</span>"
                     )
                 })
             } else {
                 text = text.replace(/\\<br>+/g,"\\\\<br>"); //只能用于换行（特征：/<br>）
-                text = isTeXLine ? text.replace(/\$/g, "") : text;
+                text = isTeXLine ? text.replace(/\$/g, "").replace("<em>","_").replace("</em>","_") : text;
             }
             var tocHTML = "<div class=\"markdown-toc editormd-markdown-toc\">" + text + "</div>"
 

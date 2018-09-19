@@ -43,9 +43,9 @@
 
         var distPath = "./";
 
-        return sass(path + fileName + ".scss", {style: "expanded", sourcemap: true, noCache: true})
+        return sass(path + fileName + ".scss", {style: "expanded", noCache: true})
             .pipe(gulp.dest(distPath))
-            .pipe(sourcemaps.init({loadMaps: true}))
+            //.pipe(sourcemaps.init({loadMaps: true}))
             .pipe(header(headerComment, {
                 pkg: pkg, fileName: function (file) {
                     var name = file.path.split(file.base);
@@ -63,7 +63,7 @@
                     return name[1].replace("\\", "");
                 }
             }))
-            .pipe(sourcemaps.write('./'))
+            //.pipe(sourcemaps.write('./'))
             .pipe(gulp.dest(distPath))
             .pipe(notify({message: fileName + ".scss task completed!"}));
     };
@@ -80,7 +80,7 @@
 
     gulp.task("js", function () {
         return gulp.src("./src/editormd.js")
-            .pipe(sourcemaps.init({loadMaps: true}))
+            //.pipe(sourcemaps.init({loadMaps: true}))
         //.pipe(jshint('./.jshintrc'))
         //.pipe(jshint.reporter('default'))
             .pipe(eslint("./.eslintrc"))
@@ -105,7 +105,7 @@
                     return name[1].replace(/[\\\/]?/, "");
                 }
             }))
-            .pipe(sourcemaps.write('./'))
+            //.pipe(sourcemaps.write('./'))
             .pipe(gulp.dest("./"))
             .pipe(notify({message: "editormd.js task complete"}));
     });
@@ -190,7 +190,7 @@
         ].join("\r\n");
 
         gulp.src("src/editormd.js")
-            .pipe(sourcemaps.init({loadMaps: true}))
+            //.pipe(sourcemaps.init({loadMaps: true}))
             .pipe(rename({suffix: ".amd"}))
             .pipe(gulp.dest("./"))
             .pipe(header(headerComment, {
@@ -217,7 +217,7 @@
                     return name[1].replace(/[\\\/]?/, "");
                 }
             }))
-            .pipe(sourcemaps.write("./"))
+            //.pipe(sourcemaps.write("./"))
             .pipe(gulp.dest("./"))
             .pipe(notify({message: "amd version task complete"}));
     });

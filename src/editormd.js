@@ -1875,21 +1875,21 @@
                 atLink: settings.atLink, // for @link
                 emailLink: settings.emailLink, // for mail address auto link
                 previewCodeHighlight: settings.previewCodeHighlight
-            })
+            });
             var markedOptions = (this.markedOptions = {
                 renderer: editormd.markedRenderer(markdownToC, rendererOptions),
                 gfm: true,
                 tables: true,
                 breaks: true,
                 pedantic: false,
-                sanitize: settings.htmlDecode ? false : true, // 关闭忽略HTML标签，即开启识别HTML标签，默认为false
+                sanitize: !settings.htmlDecode, // 关闭忽略HTML标签，即开启识别HTML标签，默认为false
                 smartLists: true,
                 smartypants: true,
                 langPrefix: "language-" //修改语言类名
-            })
-            marked.setOptions(markedOptions)
+            });
+            marked.setOptions(markedOptions);
 
-            var newMarkdownDoc = editormd.$marked(cmValue, markedOptions)
+            var newMarkdownDoc = editormd.$marked(cmValue, markedOptions);
             newMarkdownDoc = editormd.filterHTMLTags(
                 newMarkdownDoc,
                 settings.htmlDecode
@@ -3696,7 +3696,7 @@
             tables: true,
             breaks: true,
             pedantic: false,
-            sanitize: settings.htmlDecode ? false : true, // 是否忽略HTML标签，即是否开启HTML标签解析，为了安全性，默认不开启
+            sanitize: !settings.htmlDecode, // 是否忽略HTML标签，即是否开启HTML标签解析，为了安全性，默认不开启
             smartLists: true,
             smartypants: true,
             langPrefix: "language-" //修改语言类名

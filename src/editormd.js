@@ -578,7 +578,7 @@
                     return
                 }
                 if (settings.mind) {
-                    editormd.loadScript(loadPath + "mindMap.min", function () {
+                    editormd.loadScript(editormd.mindMapURL, function () {
                         _this.loadedDisplay();
                     });
                 } else {
@@ -4004,6 +4004,9 @@
         js: "//cdn.jsdelivr.net/npm/marked/lib/marked"
     };
 
+    // 自定义mindmap地址
+    editormd.mindMapURL = 'lib/mindMap.min';
+
     // 使用国外的CDN，加载速度有时会很慢，或者自定义URL
     // You can custom KaTeX load url.
     editormd.katexURL = {
@@ -4025,7 +4028,7 @@
         })
     };
 
-    //===========
+    // 自定义Mermaid地址
     editormd.mermaidURL = {
         js: "//cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min"
     };

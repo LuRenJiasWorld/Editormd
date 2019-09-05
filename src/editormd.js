@@ -3276,6 +3276,10 @@
             var linkText = text
             var hasLinkReg = /\s*<a\s*href\=\"(.*)\"\s*([^\>]*)\>(.*)<\/a\>\s*/
             var getLinkTextReg = /\s*<a\s*([^\>]+)\>([^\>]*)<\/a\>\s*/g
+            var getIdClassReg = /\{(.+?)\}/g
+
+            text = text.replace(getIdClassReg, "")
+
             if (hasLinkReg.test(text)) {
                 var tempText = []
                 text = text.split(/<a\s*([^\>]+)\>([^\>]*)<\/a\>/)
@@ -3309,8 +3313,8 @@
             headingHTML += "<a name=\"" + text + "\" class=\"reference-link\"></a>"
             headingHTML += "<span class=\"header-link octicon octicon-link\"></span>"
             headingHTML += hasLinkReg
-                ? this.atLink(this.emoji(linkText))
-                : this.atLink(this.emoji(text))
+                ? this.atLink(this.emoji(linkText)).replace(getIdClassReg, "")
+                : this.atLink(this.emoji(text)).replace(getIdClassReg, "")
             headingHTML += "</h" + level + ">"
             return headingHTML
         }

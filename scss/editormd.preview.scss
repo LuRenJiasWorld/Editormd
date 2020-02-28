@@ -41,15 +41,12 @@
     }
 
     code {
-        background: #f6f6f6;
-        padding: 3px;
+        padding: 0;
         border-radius: 3px;
         font-size: 14px;
     }
 
     pre {
-        border: 1px solid $borderColor;
-        background: #f6f6f6;
         padding: 10px;
         @include border-radius(3px);
     }

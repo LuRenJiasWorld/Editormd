@@ -73,6 +73,9 @@
 
     .CodeMirror pre.CodeMirror-placeholder {
         color: #999;
+        margin: 0;
+        position: absolute;
+        z-index: 10;
     }
 
     .cm-trailingspace {

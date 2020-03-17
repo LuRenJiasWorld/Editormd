@@ -146,7 +146,7 @@
 #{$prefix}container-mask {
     z-index: 20;
     display: block;
-    background-color: #fff;
+    background-color: rgba(0, 0, 0, 0.6);
 }
 
 @media only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (min-device-pixel-ratio: 2) {
